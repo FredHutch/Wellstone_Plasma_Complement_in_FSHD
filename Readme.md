@@ -1,4 +1,4 @@
-This repository is to support computational reproducibility of the manuscript - _Elevated plasma complement components in facioscapulohumeral dystrophy_. We included our R codes, R-compatital datasets (`*.rda`), plamsa/demographic/genetic profiles (excel sheets), and github page demonstrating the analysis workflow and  automatically executable R code.
+This repository is to support computational reproducibility of the manuscript - _Elevated plasma complement components in facioscapulohumeral dystrophy_. We included our R codes, R-compatital datasets (`*.rda`), plamsa/demographic/genetic profiles (excel sheets), and github page demonstrating the analysis workflow and  automatically executable R code (you can directly run the code and reproduce the statistics and figures in the manuscript).
 
 __Folder structure__:
 - suppl_tables (*.xlsx): plasma, demographic and genetic profiles
