@@ -1,11 +1,13 @@
 # Complement assays in a second cohort confirms elevation of complement components {#second-cohort}
 
-```{r setup-0, include=FALSE}
+We next analyzed complement component levels in plasma from a second cohort of 41 FSHD subjects and 17 controls. The corresponding dataset is `../data/table_2.rda` and Suppl. Table 2. The 15 tested components in this second assay are Bb, C2, C4b, C5, C5a, Factor D, MBL, Factor I, C1q, C3, C4, Factor B, Factor H, C4a, sC5b-9.
+
+```{r setup-2, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
 options(figcap.prefix = "Figure", figcap.sep = ":", figcap.prefix.highlight = "**")
 ```
 
-```{r define-parameter-labraray-1}
+```{r define-parameter-labraray-2}
 suppressPackageStartupMessages(library(tidyverse))
 suppressPackageStartupMessages(library(wesanderson))
 suppressPackageStartupMessages(library(ggrepel))
@@ -19,11 +21,190 @@ suppressPackageStartupMessages(library(pheatmap))
 pkg_dir <- "~/CompBio/Wellstone_Plasma_Complement_in_FSHD"
 source(file.path(pkg_dir, "scripts", "tools.R"))
 fig_dir <- file.path(pkg_dir, "figures")
-cohort1 <- get(load(file.path(pkg_dir, "data", "table_1.rda")))
-components <- c("C2", "C4b", "C5", "C5a", "Factor D", "MBL", "Factor I",
+# cohort2 specific
+cohort2 <- get(load(file.path(pkg_dir, "data", "table_2.rda")))
+components <- c("Bb", "C2", "C4b", "C5", "C5a", "Factor D", "MBL", "Factor I",
                 "C1q", "C3", "C4", "Factor B", "Factor H",
                 "C4a", "sC5b-9")
 my_color <- viridis_pal(direction = -1)(8)[c(3, 6)] # control and FSHD
 names(my_color) <- c("Control", "FSHD")
-#my_color <- c(Control="#31A345", FSHD="#3182BD")
+mean_color <- "#FF0000"
+```
+
+## Demographic distribution
+
+**Age distribution of FSHD**
+```{r demographi-distribution-fshd-2}
+cohort2 %>% filter(`pheno type`=="FSHD") %>%
+  summarise(min=min(`Visit Age`), max=max(`Visit Age`),
+            mean=mean(`Visit Age`), sd=sd(`Visit Age`))
+```
+
+**Age distribution of controls**
+```{r demographi-distribution-control-2}
+cohort2 %>% filter(`pheno type`=="Control") %>%
+  summarise(min=min(`Visit Age`), max=max(`Visit Age`),
+            mean=mean(`Visit Age`), sd=sd(`Visit Age`))
+```
+
+**Gender distribution of FSHD**
+```{r gender-distribution-fshd-1}
+cohort2 %>% filter(`pheno type`=="FSHD") %>%
+  summarize(male = sum(`Sex` == "M") / nrow(.),
+            female = sum(`Sex` == "F") / nrow(.))
+```
+
+**Gender distribution of Controls**
+```{r gender-distribution-control-2}
+cohort2 %>% filter(`pheno type`=="Control") %>%
+  summarize(male = sum(`Sex` == "M") / nrow(.),
+            female = sum(`Sex` == "F") / nrow(.))
+```
+
+## Statistics testing
+The code chunks below perform      
+- t-testing comparing the complement components in FSHD and control groups  
+- visualization of p-values (bar plot; Fig. 3a) and complement levels distribution in each group (violin plot; Fig. 3b)     
+
+```{r tidy-cohort2}
+# use .tidy_names() from scripts/tools.R" to tidy the name of cohort1
+cohort2_tidy <- .tidy_names(cohort2) %>%
+  select(`sample ID`, pheno_type, components) %>%
+  gather(key=complement, value=ml, -`sample ID`, -pheno_type)
+
+cohort2_tidy_norm <- cohort2_tidy %>%
+  group_by(complement) %>%
+  group_modify( ~.z_norm(.x))
+```
+
+### t-tests
+```{r cohort2-t-test}
+cohort2_ttest <- cohort2_tidy %>%
+  mutate(pheno_type = factor(pheno_type)) %>%
+  group_by(complement) %>%
+  spread(key=pheno_type, ml) %>%
+  summarize(control_mu = mean(Control, na.rm=TRUE),
+            control_sd = sd(Control, na.rm=TRUE),
+            FSHD_mu = mean(FSHD, na.rm=TRUE),
+            FSHD_sd = sd(FSHD, na.rm=TRUE),
+            #wilcox_test = wilcox.test(FSHD, Control)$p.value,
+            t_test = t.test(FSHD, Control)$p.value,
+            t_stats = t.test(FSHD, Control)$statistic) %>%
+  mutate(log10Pval = -10 * log10(t_test)) %>%
+  mutate(log10Pval = ifelse(t_stats < 0, -log10Pval, log10Pval)) %>%
+  mutate(candidate = ifelse(t_test < 0.05, "Yes", "No")) %>%
+  arrange(desc(t_test)) %>%
+  mutate(complement=factor(complement, levels=complement)) %>%
+  mutate(formated_p = format(t_test, digit=2))
+```
+```{r cohort2-ttest-barplot, fig.cap="Cohort2 per-compoment t-tests: FSHD vs. controls. * negative -10Log10(p-value) indicates negative t-statistics."}
+ggplot(cohort2_ttest, aes(x=complement, y=log10Pval, fill=candidate)) +
+  geom_bar(stat="identity", width=0.7, show.legend=FALSE) +
+  coord_flip() +
+  scale_fill_manual(values=c("#999999", "#E69F00")) +
+  theme_bw() +
+  labs(title="Cohort2: t-statistics and p-values", 
+       y=expression(-10*Log[10](p-value) %*% sign(t-stats))) +
+  geom_text(aes(label=formated_p), vjust=0.5, hjust=0.5, color="gray10",
+            position = position_dodge(1), size=3)
+ggsave(file=file.path(pkg_dir, "figures", "cohort2-ttest-pvalue-bar.pdf"),
+       width=5, height=3)  
+```
+
+### Visualization
+
+**Violin plot of 15 complement components measurements:**
+```{r cohort2-violin, fig.cap="14 complement components measurements grouped by FSHD and control samples."}
+cohort2_tidy %>%
+  ggplot(aes(x=pheno_type, y=ml)) +
+    geom_violin(aes(color=pheno_type), width=0.7) +
+    geom_dotplot(binaxis='y', 
+                 stackdir='center', dotsize=1, 
+                 aes(color=pheno_type, fill=pheno_type), 
+                 alpha=0.7, show.legend=FALSE) +
+    stat_summary(fun=mean, geom="point", shape=23, size=2.5,
+                 color="#FF0000") +
+    theme_minimal() +
+    labs( y=expression(mu*g / ml)) +
+    facet_wrap(~ complement , scale="free", nrow=3) +
+    scale_fill_manual(values=my_color) +
+    scale_color_manual(values=my_color) +
+    theme(legend.position="none",  legend.key.size = unit(0.4, 'cm'),
+          axis.title.x=element_blank())
+ggsave(file=file.path(pkg_dir, "figures", "cohort2-violin-15components.pdf"),
+       width=6.5, height=6)
+```
+
+
+## Complement levels of controls from two cohorts
+Suppl. Fig. 2a
+
+```{r get_cohort1_tidy}
+# get cohort1 and tidy up the control samples from 1st and 2nd cohorts
+cohort1 <- get(load(file.path(pkg_dir, "data", "table_1.rda")))
+cohort1_control <- .tidy_names(cohort1) %>%
+  filter(pheno_type=="Control") %>%
+  select(`sample ID`, components, Cohort) %>%
+  gather(key=complement, value=ml, -`sample ID`, -Cohort)
+cohort2_control <- .tidy_names(cohort2) %>%
+  filter(pheno_type=="Control") %>%
+  select(`sample ID`, components, Cohort) %>%
+  gather(key=complement, value=ml, -`sample ID`, -Cohort)
+
+control_tidy <- bind_rows(cohort1_control, cohort2_control) %>% 
+  filter(complement !="Bb")
+```
+
+```{r control-violin, fig.cap="Complement levels of controls from two cohorts. The violin plots display the distribution of the plasma levels by cohorts. The gray dots represent the complement levels in the pilot cohort (cohort1) and the yellow dots in the second cohort (cohort2). The red dots are the mean values in each cohort."}
+ggplot(control_tidy, aes(x=Cohort, y=ml)) +
+  geom_violin(aes(color=Cohort), width=0.7,na.rm=TRUE) +
+  geom_dotplot(binaxis='y', na.rm=TRUE,
+               stackdir='center', dotsize=1, 
+               aes(color=Cohort, fill=Cohort), 
+               alpha=0.7, show.legend=FALSE) +
+    stat_summary(fun=mean, geom="point", shape=23, size=2, 
+               color=mean_color) +
+  theme_minimal() +
+  labs(title="Controls",
+       y=expression(mu*g / ml)) +
+  facet_wrap(~ complement, nrow=3, scale="free") +
+  scale_fill_manual(values=c("#999999", "#E69F00")) +
+  scale_color_manual(values=c("#999999", "#E69F00")) +
+  theme(legend.position = c(0.9, 0.15),
+        legend.key.size = unit(0.4, 'cm'),
+        axis.text.x=element_blank(), axis.title.x=element_blank())
+ggsave(file.path(pkg_dir, "figures", "controls-two-cohorts-violin.pdf"),
+    height=4, width=6)
+```
+
+## Stability of FSHDs between two visits 
+The first and the second visits are names `plasma1` and `plasma2` respectively. The code chuck below reproduce Suppl. Fig. 2b. 
+```{r plot-cohort2-plasma1-pairs-trajectory, fig.height=10, fig.cap="A trajectory plot of complement levels between the first (plasma1) and second (plasma2) plasma samples of individuals. The gray area presents the range of complement levels in the second cohort's controls."}
+cohort2_pairs <- 
+  get(load(file.path(pkg_dir, "data", "table_4_update.rda")))  %>%
+  .tidy_names(.) %>% 
+  filter(Cohort == "cohort2", pheno_type == "FSHD") %>%
+  select(`sample ID`, components, Plasma, `patient ID`) %>%
+  gather(key=complement, value=ml, -`sample ID`, -Plasma, -`patient ID`)
+
+# control ranges
+cntr2_rng <- cohort2_tidy %>% filter(pheno_type=="Control") %>%
+  group_by(complement) %>%
+  summarise(min=min(ml, na.rm=TRUE), max=max(ml, na.rm=TRUE)) %>%
+  ungroup()
+
+ggplot(cohort2_pairs, aes(x=Plasma, y=ml)) +
+  geom_point(aes(color=Plasma), size=2, show.legend=FALSE) +
+  geom_line(aes(group=`patient ID`), color="gray50", show.legend=FALSE) +
+  theme_bw() +
+  geom_boxplot(width = 0.3, aes(color=Plasma), fill="transparent",
+               show.legend=FALSE) +
+  geom_rect(data=cntr2_rng, inherit.aes=FALSE,
+            aes(xmin=-Inf, xmax=Inf, ymin=min, ymax=max),
+            fill="gray50", colour=NA, alpha=0.2) +
+    scale_color_manual(values=c("#4AC16DFF", "#365C8DFF")) +
+  facet_wrap(~complement, nrow=3, scale="free") +
+  labs(title="Cohort2: plasma1 vs. plasma2", 
+       y=expression(mu*g / ml))
+ggsave(file.path(pkg_dir, "figures", "Cohort2-plasma-pairs-trajectoryplot.pdf"), width=7.5, height=6)
 ```
