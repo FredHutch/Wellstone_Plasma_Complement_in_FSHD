@@ -1,9 +1,10 @@
 # Combined cohort  {#combined-cohort}
 
-We combined the 41 FSHD second cohort first plasa samples with 12 plasma collected from first cohort at a follow-up visit, and compared them to the 17 controls ample from the second cohort. All are run in the same assay group. Using this cohort, we explored the compleent components that best distinguish FSHD from controls.
+We made a discovery cohort by combining 41, 12 plasma collected from first cohort at a follow-up visit, and 17 controls sample from the second cohort. Thess plasma samples were all run in the same assay group. Using this cohort, we explored the complement components that are best in distinguishing  FSHD from controls.
 
-**Summarize the results here**
-The corresponding data source is Suppl. Table 3 (`../data/table_3.rda`). The code chunks here reproduced Fig. 4a-c and Suppl. Fig. 3a-d.
+**Summary**
+
+The code chunks here reproduced Fig. 4a-c and Suppl. Fig. 3a-d.
 
 ```{r setup-3, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
@@ -48,8 +49,8 @@ comb_tidy_norm <- comb_tidy %>%
 
 ## Explore components best distinguish FSHD from controls
 
-### t-test
-The t-test result is similar to that of cohort2 with C4b and C3 are significantly elevated (p-value < 0.05). Factor D and Bb are mildly elevated.
+### $t$-test
+The $t$-test result is similar to that of cohort2 -- C4b and C3 are significantly elevated (p-value < 0.05). Factor D and Bb are mildly elevated.
 
 ```{r comb-ttest}
 comb_ttest <- comb_tidy %>% 
@@ -71,7 +72,7 @@ comb_ttest <- comb_tidy %>%
   mutate(formated_p = format(t_test, digit=2))
 ```
 
-**t-test barplot (Suppl. Fig. 3a)**
+**$t$-test barplot (Suppl. Fig. 3a)**
 ```{r comb-ttest-barplot, fig.cap="Combind cohort per-compoment t-tests: FSHD vs. controls. * negative -10Log10(p-value) indicates negative t-statistics."}
 ggplot(comb_ttest, aes(x=complement, y=log10Pval, fill=candidate)) +
   geom_bar(stat="identity", width=0.7, show.legend=FALSE) +
@@ -87,7 +88,7 @@ ggsave(file=file.path(pkg_dir, "figures", "comb-cohort-pvalue-bar.pdf"),
 ```
 
 ### Correlation tests
-We performed Pearson Correlatin test among 15 components on the combined cohort FSHD samples and observed seven highly correlated compoments (Pearson > 0.45) and FSHD-associated (based on t-tests):        
+We performed Pearson Correlatin test among 15 components on FSHDs in the combined cohort and observed seven highly correlated compoments (Pearson > 0.45) and FSHD-associated (based on t-tests):        
 
 - C3, FactorH and Factor D  (alternative pathway focused). Dropped correlated Factor I and B because they are not relatively associated with FSHD levels     
 - C4/C4b/C5/sC5b-9 (classical pathway focused)  
@@ -490,9 +491,4 @@ tmp <- .tidy_names(comb) %>% select(`sample ID`, `D4Z4 Repeats`) %>%
   filter(!is.na(`D4Z4 Repeats`))
 # CSS vs. composite_zscore (4)
 cor(tmp$`D4Z4 Repeats`, tmp$composite_zscore)  
-```
-
-### D4Z4 vs. complement levels
-```{r D4Z4-vs-complements}
-
 ```
