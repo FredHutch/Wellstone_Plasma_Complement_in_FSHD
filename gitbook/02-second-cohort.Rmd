@@ -1,6 +1,6 @@
 # Complement assays in a second cohort confirms elevation of complement components {#second-cohort}
 
-We next analyzed complement component levels in plasma from a second cohort of 41 FSHD subjects and 17 controls. The corresponding dataset is `../data/table_2.rda` and Suppl. Table 2. The 15 tested components in this second assay are Bb, C2, C4b, C5, C5a, Factor D, MBL, Factor I, C1q, C3, C4, Factor B, Factor H, C4a, sC5b-9.
+The second cohort consists of 41 FSHD subjects and 17 controls. Here, we performed a parallel analysis, as for the first cohort, on 15 tested components including Bb, C2, C4b, C5, C5a, Factor D, MBL, Factor I, C1q, C3, C4, Factor B, Factor H, C4a, sC5b-9.
 
 ```{r setup-2, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
@@ -37,34 +37,38 @@ mean_color <- "#FF0000"
 ```{r demographi-distribution-fshd-2}
 cohort2 %>% filter(`pheno type`=="FSHD") %>%
   summarise(min=min(`Visit Age`), max=max(`Visit Age`),
-            mean=mean(`Visit Age`), sd=sd(`Visit Age`))
+            mean=mean(`Visit Age`), sd=sd(`Visit Age`)) %>%
+  knitr::kable(caption="FSHDs age distribution.")
 ```
 
 **Age distribution of controls**
 ```{r demographi-distribution-control-2}
 cohort2 %>% filter(`pheno type`=="Control") %>%
   summarise(min=min(`Visit Age`), max=max(`Visit Age`),
-            mean=mean(`Visit Age`), sd=sd(`Visit Age`))
+            mean=mean(`Visit Age`), sd=sd(`Visit Age`)) %>%
+  knitr::kable(caption="Controls age distribution")
 ```
 
 **Gender distribution of FSHD**
 ```{r gender-distribution-fshd-1}
 cohort2 %>% filter(`pheno type`=="FSHD") %>%
   summarize(male = sum(`Sex` == "M") / nrow(.),
-            female = sum(`Sex` == "F") / nrow(.))
+            female = sum(`Sex` == "F") / nrow(.)) %>%
+  knitr::kable(caption="FSHDs gender distribution")
 ```
 
 **Gender distribution of Controls**
 ```{r gender-distribution-control-2}
 cohort2 %>% filter(`pheno type`=="Control") %>%
   summarize(male = sum(`Sex` == "M") / nrow(.),
-            female = sum(`Sex` == "F") / nrow(.))
+            female = sum(`Sex` == "F") / nrow(.)) %>%
+  knitr::kable(caption="Controls gender distribution.")
 ```
 
 ## Statistics testing
-The code chunks below perform      
-- t-testing comparing the complement components in FSHD and control groups  
-- visualization of p-values (bar plot; Fig. 3a) and complement levels distribution in each group (violin plot; Fig. 3b)     
+In the second cohort, C4b and C3 significantly increased in FHSD, and Bb and C4b are moderately increased. The code chunks below perform      
+- $t$-testing comparing the complement components in FSHD and control groups  
+- visualization of p-values (Figure \2bar plot; Fig. 3a) and complement levels distribution in each group (violin plot; Fig. 3b)     
 
 ```{r tidy-cohort2}
 # use .tidy_names() from scripts/tools.R" to tidy the name of cohort1
@@ -111,9 +115,7 @@ ggsave(file=file.path(pkg_dir, "figures", "cohort2-ttest-pvalue-bar.pdf"),
        width=5, height=3)  
 ```
 
-### Visualization
-
-**Violin plot of 15 complement components measurements:**
+### Violin plot of 15 complement components measurements
 ```{r cohort2-violin, fig.cap="14 complement components measurements grouped by FSHD and control samples."}
 cohort2_tidy %>%
   ggplot(aes(x=pheno_type, y=ml)) +
@@ -136,7 +138,7 @@ ggsave(file=file.path(pkg_dir, "figures", "cohort2-violin-15components.pdf"),
 ```
 
 
-## Complement levels of controls from two cohorts
+## Controls from two cohorts
 Suppl. Fig. 2a
 
 ```{r get_cohort1_tidy}
