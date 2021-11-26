@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Elevated plasma complement components in facioscapulohumeral dystrophy</title>
+  <meta name="description" content="analysis workflow and R codes supporting the manuscript - Elevated plasma complement components in facioscapulohumeral dystrophy" />
+  <meta name="generator" content="bookdown 0.18 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Elevated plasma complement components in facioscapulohumeral dystrophy" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="analysis workflow and R codes supporting the manuscript - Elevated plasma complement components in facioscapulohumeral dystrophy" />
+  <meta name="github-repo" content="FredHutch/Wellstone_Plasma_Complement_in_FSHD" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Elevated plasma complement components in facioscapulohumeral dystrophy" />
+  
+  <meta name="twitter:description" content="analysis workflow and R codes supporting the manuscript - Elevated plasma complement components in facioscapulohumeral dystrophy" />
+  
+
+<meta name="author" content="Chao-Jen Wong" />
+
+
+<meta name="date" content="2021-11-26" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+
+<link rel="next" href="first-cohort.html"/>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">A Minimal Book Example</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a><ul>
+<li class="chapter" data-level="0.1" data-path="index.html"><a href="index.html#system-requirement-and-software"><i class="fa fa-check"></i><b>0.1</b> System requirement and software</a></li>
+<li class="chapter" data-level="0.2" data-path="index.html"><a href="index.html#samples-and-datasets"><i class="fa fa-check"></i><b>0.2</b> Samples and datasets</a></li>
+<li class="chapter" data-level="0.3" data-path="index.html"><a href="index.html#methods"><i class="fa fa-check"></i><b>0.3</b> Methods</a><ul>
+<li class="chapter" data-level="0.3.1" data-path="index.html"><a href="index.html#normalization"><i class="fa fa-check"></i><b>0.3.1</b> Normalization</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="1" data-path="first-cohort.html"><a href="first-cohort.html"><i class="fa fa-check"></i><b>1</b> First cohort of FSHD and control plasma samples identifies complement components elevated in FSHD plasma</a><ul>
+<li class="chapter" data-level="1.1" data-path="first-cohort.html"><a href="first-cohort.html#demographic-distribution"><i class="fa fa-check"></i><b>1.1</b> Demographic distribution</a></li>
+<li class="chapter" data-level="1.2" data-path="first-cohort.html"><a href="first-cohort.html#statistics-testing"><i class="fa fa-check"></i><b>1.2</b> Statistics testing</a><ul>
+<li class="chapter" data-level="1.2.1" data-path="first-cohort.html"><a href="first-cohort.html#t-tests"><i class="fa fa-check"></i><b>1.2.1</b> t-tests</a></li>
+<li class="chapter" data-level="1.2.2" data-path="first-cohort.html"><a href="first-cohort.html#violin-plot-of-14-complement-components-measurements"><i class="fa fa-check"></i><b>1.2.2</b> Violin plot of 14 complement components measurements</a></li>
+<li class="chapter" data-level="1.2.3" data-path="first-cohort.html"><a href="first-cohort.html#heatmap-and-cluster-analysis"><i class="fa fa-check"></i><b>1.2.3</b> Heatmap and cluster analysis</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="second-cohort.html"><a href="second-cohort.html"><i class="fa fa-check"></i><b>2</b> Complement assays in a second cohort confirms elevation of complement components</a><ul>
+<li class="chapter" data-level="2.1" data-path="second-cohort.html"><a href="second-cohort.html#demographic-distribution-1"><i class="fa fa-check"></i><b>2.1</b> Demographic distribution</a></li>
+<li class="chapter" data-level="2.2" data-path="second-cohort.html"><a href="second-cohort.html#statistics-testing-1"><i class="fa fa-check"></i><b>2.2</b> Statistics testing</a><ul>
+<li class="chapter" data-level="2.2.1" data-path="second-cohort.html"><a href="second-cohort.html#t-tests-1"><i class="fa fa-check"></i><b>2.2.1</b> t-tests</a></li>
+<li class="chapter" data-level="2.2.2" data-path="second-cohort.html"><a href="second-cohort.html#violin-plot-of-15-complement-components-measurements"><i class="fa fa-check"></i><b>2.2.2</b> Violin plot of 15 complement components measurements</a></li>
+</ul></li>
+<li class="chapter" data-level="2.3" data-path="second-cohort.html"><a href="second-cohort.html#controls-from-two-cohorts"><i class="fa fa-check"></i><b>2.3</b> Controls from two cohorts</a></li>
+<li class="chapter" data-level="2.4" data-path="second-cohort.html"><a href="second-cohort.html#stability-of-fshds-between-two-visits"><i class="fa fa-check"></i><b>2.4</b> Stability of FSHDs between two visits</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="combined-cohort.html"><a href="combined-cohort.html"><i class="fa fa-check"></i><b>3</b> Combined cohort</a><ul>
+<li class="chapter" data-level="3.1" data-path="combined-cohort.html"><a href="combined-cohort.html#explore-components-best-distinguish-fshd-from-controls"><i class="fa fa-check"></i><b>3.1</b> Explore components best distinguish FSHD from controls</a><ul>
+<li class="chapter" data-level="3.1.1" data-path="combined-cohort.html"><a href="combined-cohort.html#t-test"><i class="fa fa-check"></i><b>3.1.1</b> <span class="math inline">\(t\)</span>-test</a></li>
+<li class="chapter" data-level="3.1.2" data-path="combined-cohort.html"><a href="combined-cohort.html#correlation-tests"><i class="fa fa-check"></i><b>3.1.2</b> Correlation tests</a></li>
+</ul></li>
+<li class="chapter" data-level="3.2" data-path="combined-cohort.html"><a href="combined-cohort.html#panel-of-seven---classification-and-composite-z-score"><i class="fa fa-check"></i><b>3.2</b> Panel of seven - Classification and composite z-score</a><ul>
+<li class="chapter" data-level="3.2.1" data-path="combined-cohort.html"><a href="combined-cohort.html#boxplot-by-sample-groups"><i class="fa fa-check"></i><b>3.2.1</b> Boxplot by sample groups</a></li>
+<li class="chapter" data-level="3.2.2" data-path="combined-cohort.html"><a href="combined-cohort.html#heatmapclustering"><i class="fa fa-check"></i><b>3.2.2</b> Heatmap/clustering</a></li>
+<li class="chapter" data-level="3.2.3" data-path="combined-cohort.html"><a href="combined-cohort.html#composite-z-score"><i class="fa fa-check"></i><b>3.2.3</b> Composite z-score</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="combined-cohort.html"><a href="combined-cohort.html#panel-of-four---classification-and-composite-z-scores"><i class="fa fa-check"></i><b>3.3</b> Panel of four - Classification and composite z-scores</a><ul>
+<li class="chapter" data-level="3.3.1" data-path="combined-cohort.html"><a href="combined-cohort.html#boxplot-by-sample-groups-1"><i class="fa fa-check"></i><b>3.3.1</b> Boxplot by sample groups</a></li>
+<li class="chapter" data-level="3.3.2" data-path="combined-cohort.html"><a href="combined-cohort.html#heatmapclustering-1"><i class="fa fa-check"></i><b>3.3.2</b> Heatmap/clustering</a></li>
+<li class="chapter" data-level="3.3.3" data-path="combined-cohort.html"><a href="combined-cohort.html#composite-z-score-1"><i class="fa fa-check"></i><b>3.3.3</b> Composite z-score</a></li>
+</ul></li>
+<li class="chapter" data-level="3.4" data-path="combined-cohort.html"><a href="combined-cohort.html#clinical-severity-score-and-d4z4-repeats"><i class="fa fa-check"></i><b>3.4</b> Clinical severity score and D4Z4 repeats</a><ul>
+<li class="chapter" data-level="3.4.1" data-path="combined-cohort.html"><a href="combined-cohort.html#css-vs.composite-z-score"><i class="fa fa-check"></i><b>3.4.1</b> CSS vs. composite z-score</a></li>
+<li class="chapter" data-level="3.4.2" data-path="combined-cohort.html"><a href="combined-cohort.html#d4z4-vs.composite-z-score"><i class="fa fa-check"></i><b>3.4.2</b> D4Z4 vs. composite z-score</a></li>
+</ul></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Elevated plasma complement components in facioscapulohumeral dystrophy</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="header">
+<h1 class="title">Elevated plasma complement components in facioscapulohumeral dystrophy</h1>
+<p class="author"><em>Chao-Jen Wong</em></p>
+<p class="date"><em>2021-11-26</em></p>
+</div>
+<div id="preface" class="section level1 unnumbered">
+<h1>Preface</h1>
+<p>The purpose of this book is to support the transparency and reproducibilty of the statistical analysis for our manuscript – <em>Elevated plasma complement components in facioscapulohumeral dystrophy</em>. This book contains details of our analysis approaches and automatically executable R codes; the figures and tables on the manuscript were rendered on the fly by running this book’s <a href="https://github.com/FredHutch/Wellstone_Plasma_Complement_in_FSHD/tree/main/gitbook">source Rmd files</a>. This book is built by R markdown, <strong>knitr</strong> <span class="citation">(Xie <a href="#ref-xie2015">2015</a>)</span>, and <strong>bookdown</strong> <span class="citation">(Xie <a href="#ref-R-bookdown">2020</a>)</span>.</p>
+<p>For scientific description, we recommend readers to consult the publication (link here).</p>
+<div id="system-requirement-and-software" class="section level2">
+<h2><span class="header-section-number">0.1</span> System requirement and software</h2>
+<ul>
+<li>R <span class="math inline">\(\geq\)</span> 4.0.3</li>
+<li>The <em>tidyverse</em> project packages</li>
+<li><em>BiocStyle</em>, <em>Rmarkdown</em>, <em>bookdown</em>, <em>knitr</em>, and <em>tinytex</em> packages</li>
+</ul>
+</div>
+<div id="samples-and-datasets" class="section level2">
+<h2><span class="header-section-number">0.2</span> Samples and datasets</h2>
+<p>In this repository, we prepared four <a href="https://github.com/FredHutch/Wellstone_Plasma_Complement_in_FSHD/tree/main/data">datasets</a> for first, second, discovery, and combined cohorts. They are all R <code>data.frame</code> instances, with rows presenting samples and columns the complement components.</p>
+<p>In our github repos <a href="https://github.com/FredHutch/Wellstone_Plasma_Complement_in_FSHD/tree/main/data">data</a> folder, we have</p>
+<table>
+<caption><span id="tab:dataset">Table 0.1: </span>Description of datasets in the data folder</caption>
+<thead>
+<tr class="header">
+<th align="left">dataset</th>
+<th align="left">description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">table_1.rda</td>
+<td align="left">first cohort</td>
+</tr>
+<tr class="even">
+<td align="left">table_2.rda</td>
+<td align="left">second cohort</td>
+</tr>
+<tr class="odd">
+<td align="left">table_3.rda</td>
+<td align="left">discovery cohort including selected samples from first and second cohorts</td>
+</tr>
+<tr class="even">
+<td align="left">table_4_update.rda</td>
+<td align="left">comprehensive set of first and second cohorts and re-run samples</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="methods" class="section level2">
+<h2><span class="header-section-number">0.3</span> Methods</h2>
+<p>We applied the following methods the first, second, and discovery cohorts.</p>
+<ul>
+<li><strong><span class="math inline">\(t\)</span>-test.</strong> for first and second cohort, we compared FSHDs with controls. Then we examed whether the first and second cohorts give consistent or different signatures.</li>
+<li><strong>Normalization.</strong> For each complement (column), wevscaled the protein levels by z-score.</li>
+<li><strong>Composite score.</strong> The per-sample composite z-score is the sum of the z-score of all the complement components.</li>
+<li><strong>Partial composite score.</strong> For each sample, partial composite score is the sum of selected complement components.</li>
+<li><strong>Discovery cohort.</strong> The discovery cohort consists of samples from first and second cohorts. We performed pricipal component analysis to classify different groups of FSHDs and identify the components that are better discriminate FSHDs from controls.</li>
+</ul>
+<div id="normalization" class="section level3">
+<h3><span class="header-section-number">0.3.1</span> Normalization</h3>
+<p><strong>z-score:</strong> Let <span class="math inline">\(x_{i, j}\)</span> be the values of the matrix <span class="math inline">\(X\)</span>, where <span class="math inline">\(i \in \{1, 2, \dots, I\}\)</span> denotes the sample, <span class="math inline">\(j \in \{1, 2, \dots, J\}\)</span> the complement component. For each complement component, <span class="math inline">\(i\)</span>, <span class="math inline">\(\overline{X}_j\)</span> denotes the sample mean and <span class="math inline">\(SD_j\)</span> the standard deviation. For each complement <span class="math inline">\(i\)</span> and sample <span class="math inline">\(j\)</span>, the normalized score is given by <span class="math inline">\(z_{i, j} = \frac{x_{i, j} - \overline{X}_j}{SD_j}\)</span>. The standardized z-score gives the number of standard deviation by which the value is above or below the observed sample means.</p>
+
+</div>
+</div>
+</div>
+<h3>References</h3>
+<div id="refs" class="references">
+<div id="ref-xie2015">
+<p>Xie, Yihui. 2015. <em>Dynamic Documents with R and Knitr</em>. 2nd ed. Boca Raton, Florida: Chapman; Hall/CRC. <a href="http://yihui.name/knitr/">http://yihui.name/knitr/</a>.</p>
+</div>
+<div id="ref-R-bookdown">
+<p>Xie, Yihui. 2020. <em>Bookdown: Authoring Books and Technical Documents with R Markdown</em>. <a href="https://CRAN.R-project.org/package=bookdown">https://CRAN.R-project.org/package=bookdown</a>.</p>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+
+<a href="first-cohort.html" class="navigation navigation-next navigation-unique" aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/rstudio/bookdown-demo/edit/master/index.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": "git@github.com:FredHutch/Wellstone_Plasma_Complement_in_FSHD.gitindex.Rmd",
+"text": null
+},
+"download": ["gitbook.pdf", "gitbook.epub"],
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>
