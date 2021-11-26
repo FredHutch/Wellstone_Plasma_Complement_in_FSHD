@@ -1,5 +1,5 @@
 ---
-title: "Elevated plasmsuppl complement components in facioscapulohumeral dystrophy"
+title: "Elevated plasma complement components in facioscapulohumeral dystrophy"
 author: "Chao-Jen Wong"
 date: "`r Sys.Date()`"
 documentclass: "book"
@@ -8,40 +8,45 @@ bibliography: [book.bib, packages.bib]
 biblio-style: apalike
 link-citations: yes
 github-repo: FredHutch/Wellstone_Plasma_Complement_in_FSHD
-description: "This book contains the analysis workflow and R codes supporting the manuscript - Elevated plasmsuppl complement components in facioscapulohumeral dystrophy"
+description: "analysis workflow and R codes supporting the manuscript - Elevated plasma complement components in facioscapulohumeral dystrophy"
 ---
 
 # Preface {-}
-This book is to support the computational reproducibility of the manuscript - _Elevated plasmsuppl complement components in facioscapulohumeral dystrophy_. We recomment readers to consult the publication for a scientific description. This book only contains the analysis workflow and automatically executable R codes that generate statistics and figures for the manuscript.
+The purpose of this book is to support the transparency and reproducibilty of the statistical analysis for our manuscript -- _Elevated plasma complement components in facioscapulohumeral dystrophy_. This book contains details of our analysis approaches and automatically executable R codes; the figures and tables on the manuscript were rendered on the fly by running this book's [source Rmd files](https://github.com/FredHutch/Wellstone_Plasma_Complement_in_FSHD/tree/main/gitbook).  This book is built by R markdown, **knitr** [@xie2015], and **bookdown** [@R-bookdown].
 
-This book is built by R markdown, **knitr** [@xie2015], and **bookdown**[@R-bookdown].
-
+For scientific description, we recommend readers to consult the publication (link here). 
 
 ## System requirement and software
-The figures and tables were rendered on the fly by running the Rmd (hyperlink here) files. 
-
 - R $\geq$ 4.0.3
 - The _tidyverse_ project packages
 - _BiocStyle_, _Rmarkdown_, _bookdown_, _knitr_, and  _tinytex_ packages
 
-Figures and tables are rendered on the fly by running the Rmd files (hyperlink here)
+## Samples and datasets
+In this repository, we prepared four [datasets](https://github.com/FredHutch/Wellstone_Plasma_Complement_in_FSHD/tree/main/data) for first, second, discovery, and combined cohorts. They are all R `data.frame` instances, with rows presenting samples and columns the complement components.
 
-## Overview
-- First cohort of FSHD and control plasma samples identifies complement components elevated in FSHD plasma     
-- Complement assays in a second cohort confirms elevation of complement components     
+In our github repos [data](https://github.com/FredHutch/Wellstone_Plasma_Complement_in_FSHD/tree/main/data) folder, we have 
+
+```{r dataset, echo=FALSE}
+suppressPackageStartupMessages(library(dplyr))
+data.frame(dataset = c("table_1.rda", "table_2.rda", 
+                       "table_3.rda", "table_4_update.rda"),
+           description=c("first cohort",
+                         "second cohort",
+                         "discovery cohort including selected samples from first and second cohorts",
+                         "comprehensive set of first and second cohorts and re-run samples")) %>%
+  knitr::kable(caption="Description of datasets in the data folder")
+```
 
 
 ## Methods
-We applied the analysis to each cohort separately and checked whether the signatures were consistent. 
+We applied the following methods the first, second, and discovery cohorts.
 
-- t-test: for each cohort, compared FSHDs with controls (horizontal bars); do cohort1 and cohort2 give different signatures?
-- Normalization: for each complement, scale the protein levels by z-score or z-like-score (center at control).
-- Sample score: average z-score per sample explaining how the sample deviates up or above the center of controls (or sample means if using z-score).
-- Partial sample scaore: average z-score of selected complements.
-- Compare samples and partial sample scores of FSHDs and controls in each cohort. 
-- Compare the trend of sample scores (and partial sample score) of cohort1 and cohort 2. How are they different?
-- Based on normalized matrix, perfrom PCA and showe first two principal components and loading variables. 
+- **$t$-test.** for first and second cohort, we compared FSHDs with controls. Then we examed whether the first and second cohorts give consistent or different signatures.
+- **Normalization.** For each complement (column), wevscaled the protein levels by z-score. 
+- **Composite score.**  The per-sample composite z-score is the sum of the z-score of all the complement components. 
+- **Partial composite score.** For each sample, partial composite score is the sum of selected complement components.
+- **Discovery cohort.** The discovery cohort consists of samples from first and second cohorts. We performed pricipal component analysis to classify different groups of FSHDs and identify the components that are better discriminate FSHDs from controls.
 
 ### Normalization
 
-__z-score-like:__ Let $x_{i, j}$ be the values of the matrix $X$, where $i \in \{1, 2, \dots, I\}$ denotes the sample, $j \in \{1, 2, \dots, J\}$ the complement. For each complement $i$, $\overline{X_C}_j$ denotes the mean of the controls and $SD_j$ the standard deviation of all samples. For each complement $i$ and sample $j$, the normalized score is given by $z_{i, j} = \frac{x_{i, j} - \overline{X_C}_j}{SD_j}$. The standardized z-score gives the number of standard deviation by which the value is above or below the observed sample means. On the other hand, our modified version gives the offset score by which the value is above or below the observed control means. 
+__z-score:__ Let $x_{i, j}$ be the values of the matrix $X$, where $i \in \{1, 2, \dots, I\}$ denotes the sample, $j \in \{1, 2, \dots, J\}$ the complement component. For each complement component, $i$, $\overline{X}_j$ denotes the sample mean and $SD_j$ the standard deviation. For each complement $i$ and sample $j$, the normalized score is given by $z_{i, j} = \frac{x_{i, j} - \overline{X}_j}{SD_j}$. The standardized z-score gives the number of standard deviation by which the value is above or below the observed sample means. 
