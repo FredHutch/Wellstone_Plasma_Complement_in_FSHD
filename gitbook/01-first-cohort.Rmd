@@ -2,7 +2,7 @@
 
 In this chapter, we analyzed complement levels in 24 FSHD subjects and 12 controls from the first cohort.  The tested complement components included six components of the classical/lectin activation pathway (C1q, C4, MBL, C4a, C2, C4b), four of the alternative pathway (Factor H, Factor I, Factor D, Factor B), and four of the terminal effector pathway (C3, C5, C5a, sC5b-9). 
 
-```{r setup-0, include=FALSE}
+```{r setup-1, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
 options(figcap.prefix = "Figure", figcap.sep = ":", figcap.prefix.highlight = "**")
 ```
@@ -27,6 +27,7 @@ components <- c("C2", "C4b", "C5", "C5a", "Factor D", "MBL", "Factor I",
                 "C4a", "sC5b-9")
 my_color <- viridis_pal(direction = -1)(8)[c(3, 6)] # control and FSHD
 names(my_color) <- c("Control", "FSHD")
+mean_color <- "#FF0000"
 #my_color <- c(Control="#31A345", FSHD="#3182BD")
 ```
 
@@ -70,7 +71,7 @@ The code chunks below perform
 # use .tidy_names() from scripts/tools.R" to tidy the name of cohort1
 cohort1_tidy <- .tidy_names(cohort1) %>%
   select(-Bb) %>%
-  select(`sample ID`, pheno_type, components) %>%
+  select(`sample ID`, pheno_type, all_of(components)) %>%
   gather(key=complement, value=ml, -`sample ID`, -pheno_type)
 
 cohort1_tidy_norm <- cohort1_tidy %>%
@@ -79,7 +80,7 @@ cohort1_tidy_norm <- cohort1_tidy %>%
 ```
 
 
-**t-tests**
+### t-tests
 ```{r cohort1-t-test}
 cohort1_ttest <- cohort1_tidy %>%
   mutate(pheno_type = factor(pheno_type)) %>%
@@ -99,7 +100,7 @@ cohort1_ttest <- cohort1_tidy %>%
   mutate(complement=factor(complement, levels=complement)) %>%
   mutate(formated_p = format(t_test, digit=2))
 ```
-```{r cohort1-ttest-barplot, fig.weidth=8, fig.height=8, fig.cap="Cohort1 per-compoment t-tests: FSHD vs. controls. * negative -10Log10(p-value) indicates negative t-statistics."}
+```{r cohort1-ttest-barplot, fig.cap="Cohort1 per-compoment t-tests: FSHD vs. controls. * negative -10Log10(p-value) indicates negative t-statistics."}
 ggplot(cohort1_ttest, aes(x=complement, y=log10Pval, fill=candidate)) +
   geom_bar(stat="identity", width=0.7, show.legend=FALSE) +
   coord_flip() +
@@ -113,8 +114,10 @@ ggsave(file=file.path(pkg_dir, "figures", "cohort1-ttest-pvalue-bar.pdf"),
        width=5, height=3)  
 ```
 
-**Violin plot of 14 complement components measurements**
-```{r cohort1-violin, fig.weidth=8, fig.height=8, fig.cap="14 complement components measurements grouped by FSHD and control samples."}
+### Visualization
+
+**Violin plot of 14 complement components measurements:**
+```{r cohort1-violin, fig.cap="14 complement components measurements grouped by FSHD and control samples."}
 cohort1_tidy %>%
   ggplot(aes(x=pheno_type, y=ml)) +
     geom_violin(aes(color=pheno_type), width=0.7) +
@@ -123,20 +126,19 @@ cohort1_tidy %>%
                  aes(color=pheno_type, fill=pheno_type), 
                  alpha=0.7, show.legend=FALSE) +
     stat_summary(fun=mean, geom="point", shape=23, size=2.5,
-                 color=wes_color[1]) +
+                 color="#FF0000") +
     theme_minimal() +
     labs( y=expression(mu*g / ml)) +
     facet_wrap(~ complement , scale="free", nrow=3) +
     scale_fill_manual(values=my_color) +
     scale_color_manual(values=my_color) +
-    theme(legend.position=c(0.9, 0.15),  legend.key.size = unit(0.4, 'cm'),
-          axis.text.x=element_blank())
+    theme(legend.position="none",  legend.key.size = unit(0.4, 'cm'),
+          axis.title.x=element_blank())
 ggsave(file=file.path(pkg_dir, "figures", "cohort1-violin-14components.pdf"),
-       width=6, height=6)
+       width=6.5, height=6)
 ```
 
-**Heatmap and cluster analysis**
-
+**Heatmap and cluster analysis:**
 ```{r cohort1-heatmap, fig.height=8, fig.cap="Cohort1: heatmap of the normalized matrix."}
 norm_data <- cohort1_tidy_norm %>%
   select(-ml) %>%
