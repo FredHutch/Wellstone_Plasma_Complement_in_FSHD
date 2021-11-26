@@ -1,0 +1,29 @@
+# Complement assays in a second cohort confirms elevation of complement components {#second-cohort}
+
+```{r setup-0, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+options(figcap.prefix = "Figure", figcap.sep = ":", figcap.prefix.highlight = "**")
+```
+
+```{r define-parameter-labraray-1}
+suppressPackageStartupMessages(library(tidyverse))
+suppressPackageStartupMessages(library(wesanderson))
+suppressPackageStartupMessages(library(ggrepel))
+suppressPackageStartupMessages(library(kableExtra))
+suppressPackageStartupMessages(library(knitr))
+suppressPackageStartupMessages(library(ggfortify))
+suppressPackageStartupMessages(library(broom))
+suppressPackageStartupMessages(library(pheatmap))
+suppressPackageStartupMessages(library(viridis))
+suppressPackageStartupMessages(library(pheatmap))
+pkg_dir <- "~/CompBio/Wellstone_Plasma_Complement_in_FSHD"
+source(file.path(pkg_dir, "scripts", "tools.R"))
+fig_dir <- file.path(pkg_dir, "figures")
+cohort1 <- get(load(file.path(pkg_dir, "data", "table_1.rda")))
+components <- c("C2", "C4b", "C5", "C5a", "Factor D", "MBL", "Factor I",
+                "C1q", "C3", "C4", "Factor B", "Factor H",
+                "C4a", "sC5b-9")
+my_color <- viridis_pal(direction = -1)(8)[c(3, 6)] # control and FSHD
+names(my_color) <- c("Control", "FSHD")
+#my_color <- c(Control="#31A345", FSHD="#3182BD")
+```

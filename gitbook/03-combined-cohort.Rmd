@@ -1,0 +1,111 @@
+# Combined cohort  {#combined-cohort}
+
+We combined the 41 FSHD second cohort first plasa samples with 12 plasma collected from first cohort at a follow-up visit, and compared them to the 17 controls ample from the second cohort. All are run in the same assay group. Using this cohort, we explored the compleent components that best distinguish FSHD from controls.
+
+The corresponding data source is Suppl. Table 3 (`../data/table_3.rda`). The code chunks here reproduced Fig. 4a-c and Suppl. Fig. 3a-d.
+
+```{r setup-3, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+options(figcap.prefix = "Figure", figcap.sep = ":", figcap.prefix.highlight = "**")
+```
+
+```{r define-parameter-labraray-3}
+suppressPackageStartupMessages(library(tidyverse))
+suppressPackageStartupMessages(library(wesanderson))
+suppressPackageStartupMessages(library(ggrepel))
+suppressPackageStartupMessages(library(kableExtra))
+suppressPackageStartupMessages(library(knitr))
+suppressPackageStartupMessages(library(ggfortify))
+suppressPackageStartupMessages(library(broom))
+suppressPackageStartupMessages(library(pheatmap))
+suppressPackageStartupMessages(library(viridis))
+suppressPackageStartupMessages(library(pheatmap))
+
+pkg_dir <- "~/CompBio/Wellstone_Plasma_Complement_in_FSHD"
+source(file.path(pkg_dir, "scripts", "tools.R"))
+fig_dir <- file.path(pkg_dir, "figures")
+# get combinded cohort
+comb <- get(load(file.path(pkg_dir, "data", "table_3.rda")))
+components <- c("Bb", "C2", "C4b", "C5", "C5a", "Factor D", "MBL", "Factor I",
+                "C1q", "C3", "C4", "Factor B", "Factor H",
+                "C4a", "sC5b-9")
+my_color <- viridis_pal(direction = -1)(8)[c(3, 6)] # control and FSHD
+names(my_color) <- c("Control", "FSHD")
+mean_color <- "#FF0000"
+```
+
+First of all, we tidy the dataset.
+
+```{r get-comb-tidy}
+comb_tidy <- .tidy_names(comb) %>%
+  select(`sample ID`, pheno_type, components) %>%
+  gather(key=complement, value=ml, -`sample ID`, -pheno_type)
+
+comb_tidy_norm <- comb_tidy %>%
+  group_by(complement) %>%
+  group_modify( ~.z_norm(.x))
+```
+
+## Explore components best distinguish FSHD from controls
+
+### t-test
+The t-test result is similar to that of cohort2 with C4b and C3 are significantly elevated (p-value < 0.05). Factor D and Bb are mildly elevated.
+
+```{r comb-ttest}
+comb_ttest <- comb_tidy %>% 
+  #mutate(pheno_type = factor(pheno_type)) %>%
+  group_by(complement) %>%
+  spread(key=pheno_type, ml) %>%
+  summarize(control_mu = mean(Control, na.rm=TRUE),
+            control_sd = sd(Control, na.rm=TRUE),
+            FSHD_mu = mean(FSHD, na.rm=TRUE),
+            FSHD_sd = sd(FSHD, na.rm=TRUE),
+            wilcox_test = wilcox.test(FSHD, Control)$p.value,
+            t_test = t.test(FSHD, Control)$p.value,
+            t_stats = t.test(FSHD, Control)$statistic) %>%
+  mutate(log10Pval = -10 * log10(t_test)) %>%
+  mutate(log10Pval = ifelse(t_stats < 0, -log10Pval, log10Pval)) %>%
+  mutate(candidate = ifelse(t_test < 0.05, "Yes", "No")) %>%
+  arrange(desc(t_test)) %>%
+  mutate(complement=factor(complement, levels=complement)) %>%
+  mutate(formated_p = format(t_test, digit=2))
+```
+
+```{r comb-ttest-barplot, fig.weidth=8, fig.height=8, fig.cap="Combind cohort per-compoment t-tests: FSHD vs. controls. * negative -10Log10(p-value) indicates negative t-statistics."}
+ggplot(comb_ttest, aes(x=complement, y=log10Pval, fill=candidate)) +
+  geom_bar(stat="identity", width=0.7, show.legend=FALSE) +
+  coord_flip() +
+  scale_fill_manual(values=c("#999999", "#E69F00")) +
+  theme_bw() +
+  labs(title="Discovery set: t-statistics and p-values", 
+       y=expression(-10*Log[10](p-value) %*% sign(t-stats))) +
+  geom_text(aes(label=formated_p), vjust=0.5, hjust=0.5, color="gray10",
+            position = position_dodge(1), size=3)
+ggsave(file=file.path(pkg_dir, "figures", "comb-cohort-pvalue-bar.pdf"),
+       width=5.4, height=3)  
+```
+
+### Correlation tests
+We performed Pearson Correlatin test among 15 components on the combined cohort FSHD samples and observed that          
+- C4, C5, sC5b-9, and C4b are highly correlated       
+- C3 moderately correlated with Factor H, B, and D       
+
+code reference: 
+
+```
+https://paulvanderlaken.com/2018/09/10/simpler-correlation-analysis-in-r-using-tidyverse-principles/
+````
+
+```{r disc-correlation}
+comb_tidy %>% spread(key=complement, value=ml) %>%
+  filter(pheno_type == "FSHD") %>%
+  select(components) %>%
+  corrr::correlate() %>%
+  corrr::shave() %>%
+  # converts a correlation df into clean matrix
+  corrr::fashion() %>%
+  readr::write_excel_csv(here::here(pkg_dir, "stats",
+                                    "comb-cohort-correlation-matrix.csv"))
+```
+
+
