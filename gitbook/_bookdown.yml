@@ -1,0 +1,10 @@
+book_filename: "gitbook"
+language:
+  ui:
+    chapter_name: "Chapter "
+delete_merged_file: true
+rmd_subdir: true
+output_dir: "../docs"
+view: git@github.com:FredHutch/Wellstone_Plasma_Complement_in_FSHD.git%s
+edit: git@github.com:FredHutch/Wellstone_Plasma_Complement_in_FSHD.git%s
+clean: ["book.bib", "packages.bib"] 
