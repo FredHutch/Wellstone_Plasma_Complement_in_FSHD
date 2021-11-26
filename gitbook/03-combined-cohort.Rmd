@@ -2,6 +2,7 @@
 
 We combined the 41 FSHD second cohort first plasa samples with 12 plasma collected from first cohort at a follow-up visit, and compared them to the 17 controls ample from the second cohort. All are run in the same assay group. Using this cohort, we explored the compleent components that best distinguish FSHD from controls.
 
+**Summarize the results here**
 The corresponding data source is Suppl. Table 3 (`../data/table_3.rda`). The code chunks here reproduced Fig. 4a-c and Suppl. Fig. 3a-d.
 
 ```{r setup-3, include=FALSE}
@@ -11,7 +12,6 @@ options(figcap.prefix = "Figure", figcap.sep = ":", figcap.prefix.highlight = "*
 
 ```{r define-parameter-labraray-3}
 suppressPackageStartupMessages(library(tidyverse))
-suppressPackageStartupMessages(library(wesanderson))
 suppressPackageStartupMessages(library(ggrepel))
 suppressPackageStartupMessages(library(kableExtra))
 suppressPackageStartupMessages(library(knitr))
@@ -71,7 +71,8 @@ comb_ttest <- comb_tidy %>%
   mutate(formated_p = format(t_test, digit=2))
 ```
 
-```{r comb-ttest-barplot, fig.weidth=8, fig.height=8, fig.cap="Combind cohort per-compoment t-tests: FSHD vs. controls. * negative -10Log10(p-value) indicates negative t-statistics."}
+**t-test barplot (Suppl. Fig. 3a)**
+```{r comb-ttest-barplot, fig.cap="Combind cohort per-compoment t-tests: FSHD vs. controls. * negative -10Log10(p-value) indicates negative t-statistics."}
 ggplot(comb_ttest, aes(x=complement, y=log10Pval, fill=candidate)) +
   geom_bar(stat="identity", width=0.7, show.legend=FALSE) +
   coord_flip() +
@@ -86,17 +87,15 @@ ggsave(file=file.path(pkg_dir, "figures", "comb-cohort-pvalue-bar.pdf"),
 ```
 
 ### Correlation tests
-We performed Pearson Correlatin test among 15 components on the combined cohort FSHD samples and observed that          
-- C4, C5, sC5b-9, and C4b are highly correlated       
-- C3 moderately correlated with Factor H, B, and D       
+We performed Pearson Correlatin test among 15 components on the combined cohort FSHD samples and observed seven highly correlated compoments (Pearson > 0.45) and FSHD-associated (based on t-tests):        
 
-code reference: 
+- C3, FactorH and Factor D  (alternative pathway focused). Dropped correlated Factor I and B because they are not relatively associated with FSHD levels     
+- C4/C4b/C5/sC5b-9 (classical pathway focused)  
 
-```
-https://paulvanderlaken.com/2018/09/10/simpler-correlation-analysis-in-r-using-tidyverse-principles/
-````
+**correlation code reference**: https://paulvanderlaken.com/2018/09/10/simpler-correlation-analysis-in-r-using-tidyverse-principles/
 
-```{r disc-correlation}
+Suppl. Fig. 3b
+```{r comb-cohort-correlation, echo=FALSE, include=FALSE}
 comb_tidy %>% spread(key=complement, value=ml) %>%
   filter(pheno_type == "FSHD") %>%
   select(components) %>%
@@ -104,8 +103,396 @@ comb_tidy %>% spread(key=complement, value=ml) %>%
   corrr::shave() %>%
   # converts a correlation df into clean matrix
   corrr::fashion() %>%
-  readr::write_excel_csv(here::here(pkg_dir, "stats",
+  readr::write_excel_csv(here::here(pkg_dir, "suppl_tables",
                                     "comb-cohort-correlation-matrix.csv"))
+```                                    
+```{r comb-cohort-correlation-plot, fig.cap="The correlation matrix among the complement components."}
+comb_tidy %>% spread(key=complement, value=ml) %>%
+  filter(pheno_type == "FSHD") %>%
+  select(components) %>%
+  corrr::correlate() %>%
+  corrr::shave() %>%
+  corrr::rplot(shape = 19, colors = c("red", "green")) +
+    theme(axis.text.x = element_text(angle = 90, hjust=0.95, vjust=0.2), 
+          legend.position="right")
+ggsave(file.path(pkg_dir, "figures", "comb_cohort_complement_corr.pdf"),
+       width=5, height=4)
+```
+```{r define-seven-factors}
+sub_alternative <- c("Factor H", "Factor D", "C3")
+sub_classical <- c("C4", "C4b", "C5", "sC5b-9")
+panel_7 <- c(sub_alternative, sub_classical)
+```
+
+**Network focused on the seven selected components**:
+Suppl. Fig. 3c.
+```{r comb-cohort-correlation-network-focus, fig.cap="Correlation network among the seven highly correlated complement components. The scaled color represents the Pearson correlation."}
+comb_tidy %>% spread(key=complement, value=ml) %>%
+  filter(pheno_type == "FSHD") %>%
+  select(all_of(panel_7) )%>%
+  corrr::correlate(., method="pearson", use="pairwise.complete.obs") %>%
+  corrr::network_plot(colors = c("red", "green"), legend=FALSE) 
+
+ggsave(file=file.path(pkg_dir, "figures",
+                      "comb-cohort-corr-network-focus.pdf"),
+       width=3, height=2)
 ```
 
 
+## Panel of seven - Classification and composite z-score
+The correlation and t-tests together revealed seven complement components (`r panel_7`) that are showing stronger association with FHSD than other components. Here we used these seven complement levels to (1) classify the FSHD samples by hierarchical cluster analysis and (2) construct per-sample composite z-scores.
+
+The code chunks below made Suppl. Fig. 3d-g (boxplots, heatmap, waterfall, composite z-score boxplot).
+
+### Boxplot by sample groups
+
+**boxplot:**
+```{r comb-cohort-boxplot-panel7, fig.cap="Violin plot of the panel of seven by sample groups."}
+comb_tidy %>%
+  filter(complement %in% all_of(panel_7)) %>%
+ggplot(aes(x=pheno_type, y=ml)) +
+  geom_violin(aes(color=pheno_type)) +
+    geom_dotplot(binaxis='y', 
+                 stackdir='center', dotsize=1, 
+                 aes(color=pheno_type, fill=pheno_type), 
+                 alpha=0.7, show.legend=FALSE) +
+    stat_summary(fun=mean, geom="point", shape=23, size=2.5,
+                 color=mean_color) +
+    theme_minimal() +
+    facet_wrap(~ complement , scale="free", nrow=2) +
+    scale_fill_manual(values=my_color) +
+    scale_color_manual(values=my_color) +
+    theme(legend.position="none", 
+          axis.title.x = element_blank()) +
+    labs(y=expression(mu*g / ml)) 
+  
+ggsave(file=file.path(pkg_dir, "figures",
+                      "comb-cohort-violin-panel7-boxplot.pdf"),
+       width=6, height=4)
+```
+
+### Heatmap/clustering
+Using hierarchical cluster and heatmap visualization, we observed a subset of 12 FSHD samples have elevated levels in the classical pathway and terminal components (C4, C4b, C5, and sC5b-9), and 7 in alternative pathway (C3, Factor H/D). Together these 19 FSHDs are labelled as "elevated" FSHD. Based on the panel of 7 factors, we made heatmap showing the clusters and PCA depicting the simple sample distance among all the samples. 
+
+Note Control C20 (ID="3170") shows the characteristics of elevated FSHDs, and cluster with the FHSDs.
+
+```{r comb-cohort-7-factors-heatmap, fig.height=6}
+# the rows could be re-arrange by defined clusters (cold fhsd, hot on terminal and alternative)
+norm_data <- comb_tidy_norm %>% select(-ml) %>%
+  spread(complement, ml_norm) 
+mat <- norm_data %>% select(all_of(panel_7)) %>% as.matrix()
+rownames(mat) <- norm_data$`sample ID`
+
+annotation_row <- data.frame(pheno_type=factor(pull(norm_data, `pheno_type`)))
+rownames(annotation_row) <- rownames(mat)
+annotation_colors <- list(pheno_type=my_color)
+
+pheatmap(mat, annotation_row=annotation_row,
+         scale="none", cellwidth=16,
+         fontsize=10, fontsize_row=6, angle_col=90,
+         annotation_colors=annotation_colors)
+```
+```{r save-comb-cohort-7-factors-heatmap, echo=FALSE, include=FALSE}
+pheatmap(mat, annotation_row=annotation_row,
+         scale="none", cellwidth=16,
+         fontsize=10, fontsize_row=6, silent=TRUE,
+         annotation_colors=annotation_colors, angle_col=90,
+         file=file.path(pkg_dir, "figures", 
+                        "comb-cohort-heatmap-panal7.pdf"))
+```
+
+**Rearrange samples by clusters**
+Rearrange the samples based on the FSHD elevation in classical/terminal and alternative pathways.
+
+
+```{r rearragne-heatmap, fig.height=6, fig.cap="Heatmap of panel 7 (Suppl Fig 3e. Arrange the samples by clusters of elevated FSHDs in different pathways."}
+# rearrange heatmap by the clust
+hc <- hclust(dist(mat))
+branch <- cutree(hc, k=6)
+df <- tibble(lables=hc$labels, order=hc$order, tree=branch) %>%
+  mutate(tree=ifelse(lables %in% c("F15B", "F16B", "F53"),
+                     3.5, tree)) %>%
+  arrange(order) %>%
+  mutate(tree=factor(tree, levels=c(6, 3, 5, 3.5, 1, 2, 4))) %>%
+  arrange(tree) 
+
+# define gaps_row
+gaps_row <- df %>% group_by(tree) %>% summarise(n=dplyr::n()) %>% mutate(gaps=cumsum(n))
+
+annotation_colors <- list(pheno_type=my_color)
+
+pheatmap(mat=mat[df$lables, ], 
+         annotation_row=annotation_row[df$lables, , drop=FALSE],
+         annotation_colors=annotation_colors,
+         scale="none", cellwidth=16, gaps_row=c(13, 17, 20, 70),
+         cluster_rows=FALSE, angle_col=90,
+         fontsize=10, fontsize_row=6)
+
+pheatmap(mat=mat[df$lables, ], 
+         annotation_row=annotation_row[df$lables, , drop=FALSE],
+         annotation_colors=annotation_colors,
+         scale="none", cellwidth=16, gaps_row=c(13, 17, 20, 70),
+         cluster_rows=FALSE,
+         fontsize=10, fontsize_row=6, slient=TRUE, angle_col=90,
+         file=file.path(pkg_dir, "figures", 
+                        "comb-cohort-heatmap-panel7-arranged.pdf"))
+```
+
+### Composite z-score
+The per-sample composite z-score is the sum of z-scores of selected complement components: $S_i = \sum_{i=1}^{m} Z_{i,j}$, where $j$ denotes the complement, m the number of selected complements, and $Z_{i,j}$ the normalized value (z-score). It gives a 1D projection of how each sample deviates up or down from each other. Using this score, we can observe difference between FSHD and controls. 
+
+
+```{r panel7-score-waterfall-plot, fig.cap="Composite z-score usign seven selected complement components."}
+sample_zscore <- comb_tidy_norm %>% 
+  filter(complement %in% all_of(panel_7)) %>%
+  group_by(`sample ID`) %>%
+  summarise(composite_zscore=sum(ml_norm, na.rm=TRUE)) %>%
+  left_join(dplyr::select(comb, `sample ID`, `pheno type`), by="sample ID") %>%
+  arrange(desc(composite_zscore)) %>%
+  dplyr::mutate(`sample ID` = factor(`sample ID`, levels=`sample ID`))
+sample_zscore_7 <- sample_zscore
+
+ggplot(sample_zscore, 
+       aes(x=`sample ID`, y=composite_zscore, fill=`pheno type`)) +
+  geom_bar(stat="identity") +
+  theme_minimal() +
+  scale_fill_manual(values=my_color) +
+  labs(y="composite z-score (7)") +
+  theme(axis.text.x = element_text(angle = 90, size=7), 
+        axis.title.x=element_blank(),
+        legend.key.size = unit(0.4, 'cm'),
+        legend.position = c(0.9, 0.8), 
+        panel.grid.minor = element_blank())
+        #panel.grid.major = element_blank())
+
+ggsave(file=file.path(pkg_dir, "figures",
+                      "comb-cohort-composite-zscore-waterfall-panel7.pdf"),
+       width=6.5, height=3)  
+```
+
+**t-test between FSHD and controls**
+```{r composite-zscore-ttest-panal7, fig.cap="Composite zscore by sample groups (Suppl. Fig. 3f)."}
+pval <- sample_zscore %>% 
+  spread(key=`pheno type`, composite_zscore) %>% 
+  summarize(pval=t.test(FSHD, Control)$p.value) %>% pull(pval)
+ggplot(sample_zscore, aes(x=`pheno type`, y=composite_zscore)) +
+  geom_boxplot(aes(color=`pheno type`), width=0.7, outlier.shape=NA,
+               show.legend = FALSE) +
+  theme_minimal() +
+  theme(axis.title.x = element_blank()) +
+  scale_color_manual(values=my_color) +
+  labs(y="Composite z-score (7)") +
+  annotate("text", x = 1.5, y = 8.75, vjust=0.5,
+           label = paste0("pval=", format(pval, digits=2)))
+ggsave(file.path(pkg_dir, "figures", "comb-cohort-composite-score-boxplot-panel7.pdf"), width=2, height=3)
+```
+
+Visualization by PCA ??
+
+```{r define-clust, echo=FALSE, eval=FALSE}
+comb_tidy_spread <- comb_tidy %>% spread(key=complement, value=ml) 
+# define clusters based on hclust
+classical_clust <- c("F25", "F39", "F40", "F41", "F42", "F43",
+                     "F45", "F48", "F49", "F07B", "F60", "F61")
+alternative_clust <- c("F15B", "F16B", "F53", "F20B", "F21B", "F27", "F62")
+elevated <- c(classical_clust, alternative_clust)
+
+hclusters <- tibble(`sample ID`=comb_tidy_spread$`sample ID`,
+                 clust = as.character(comb_tidy_spread$pheno_type)) %>%
+  mutate(clust=ifelse(`sample ID` %in% elevated, "Elevated", clust)) %>%
+  mutate(clust = factor(clust, levels=c("Elevated", "FSHD", "Control")))
+```
+
+```{r comb-cohort-pca-panel7, fig.width=8, fig.height=8, echo=FALSE, eval=FALSE}
+library(ggfortify) # provide autoplot
+network_pca <- comb_tidy_spread %>% 
+  left_join(hclusters, by="sample ID") %>%
+  rename(sampleID=`sample ID`) %>%
+  ungroup() %>% nest() %>%
+  mutate(pca = 
+           map(data, ~ prcomp(.x %>% dplyr::select(panel_7),
+                              center = TRUE, scale = FALSE)),
+         pca_aug = map2(pca, data, ~broom::augment(.x, data = .y)))
+
+network_pca %>%
+  mutate(
+    pca_graph = map2(
+      .x = pca,
+      .y = data,
+      ~ autoplot(.x, loadings = TRUE, loadings.label = TRUE,
+                 loadings.label.repel = TRUE,
+                 data = .y, label = TRUE,
+                 label.label = "sampleID", colour="clust",
+                 label.repel = TRUE) +
+        theme_bw() +
+        labs(x = "Principal Component 1",
+             y = "Principal Component 2",
+             title = "PCA based on 7 components", 
+             colour="cluster") +
+        scale_colour_manual(values=c("#F8766D", "#365C8DFF", "#4AC16DFF"))
+    )
+  ) %>%
+  pull(pca_graph)
+
+ggsave(file=file.path(pkg_dir, "figures", "comb-cohort-pca-panel7.pdf"),
+       height=10, width=10)
+```
+
+## Panel of four - Classification and composite z-scores
+We selected four best componets out of the panel of seven that are most associated with FSHD (C3, C4b, Facter D and sC5b-9). We performed similar analysis as above and made boxplots of panel of four, heatmap/cluster, waterfall and boxplots of composite z-score (4).
+
+The code chunks below made Fig. 4a-d.
+```{r define-panel-of-four}
+panel_4 <- c("C3", "C4b", "Factor D", "sC5b-9")
+```
+
+### Boxplot by sample groups
+**boxplot:**
+```{r comb-cohort-boxplot-panel4, fig.cap="Violin plot of the panel of four by sample groups."}
+comb_tidy %>%
+  filter(complement %in% all_of(panel_4)) %>%
+ggplot(aes(x=pheno_type, y=ml)) +
+  geom_violin(aes(color=pheno_type)) +
+    geom_dotplot(binaxis='y', 
+                 stackdir='center', dotsize=1, 
+                 aes(color=pheno_type, fill=pheno_type), 
+                 alpha=0.7, show.legend=FALSE) +
+    stat_summary(fun=mean, geom="point", shape=23, size=2.5,
+                 color=mean_color) +
+    theme_minimal() +
+    facet_wrap(~ complement , scale="free", nrow=1) +
+    scale_fill_manual(values=my_color) +
+    scale_color_manual(values=my_color) +
+    theme(legend.position="none", 
+          axis.title.x = element_blank()) +
+    labs(y=expression(mu*g / ml)) 
+  
+ggsave(file=file.path(pkg_dir, "figures",
+                      "comb-cohort-violin-panel4-boxplot.pdf"),
+       width=5, height=2.5)
+```
+
+### Heatmap/clustering
+The hiearchical clustering is able to distinguish elevated FSHDs from controls and other "cold" FSHDs.
+```{r comb-cohort-4-factors-heatmap, fig.height=6, fig.cap="Heatmap and clustering using panel of four components."}
+# the rows could be re-arrange by defined clusters (cold fhsd, hot on terminal and alternative)
+norm_data <- comb_tidy_norm %>% select(-ml) %>%
+  spread(complement, ml_norm) 
+mat <- norm_data %>% select(all_of(panel_4)) %>% as.matrix()
+rownames(mat) <- norm_data$`sample ID`
+
+annotation_row <- data.frame(pheno_type=factor(pull(norm_data, `pheno_type`)))
+rownames(annotation_row) <- rownames(mat)
+annotation_colors <- list(pheno_type=my_color)
+
+phm <- pheatmap(mat, annotation_row=annotation_row,
+         scale="none", cellwidth=16,
+         fontsize=10, fontsize_row=6, angle_col = 90,
+         annotation_colors=annotation_colors)
+```
+
+```{r save-comb-cohort-4-factors-heatmap, echo=FALSE}
+pheatmap(mat, annotation_row=annotation_row,
+         scale="none", cellwidth=16,
+         fontsize=10, fontsize_row=6, 
+         annotation_colors=annotation_colors,
+         silent=TRUE, angle_col = 90,
+         file=file.path(pkg_dir, "figures", "comb-cohort-heatmap-panel4.pdf"))
+```
+```{r comb-cohort-4-factors-heatmap-gap, fig.height=6}
+pheatmap(mat[phm$tree_row$order, ], annotation_row=annotation_row,
+         scale="none", cellwidth=16,
+         gaps_row = c(17, 70), treeheight_row=0,
+         annotation_colors=annotation_colors, 
+         fontsize=10, fontsize_row=6, slient=TRUE,
+         cluster_rows = FALSE, angle_col=90,
+         file=file.path(pkg_dir, "figures", 
+                        "comb-cohort-heatmap-panel4-arranged.pdf"))
+```
+
+### Composite z-score
+
+```{r panel4-score-waterfall-plot, fig.cap="Composite z-score usign seven selected complement components."}
+sample_zscore <- comb_tidy_norm %>% 
+  filter(complement %in% all_of(panel_4)) %>%
+  group_by(`sample ID`) %>%
+  summarise(composite_zscore=sum(ml_norm, na.rm=TRUE)) %>%
+  left_join(dplyr::select(comb, `sample ID`, `pheno type`), by="sample ID") %>%
+  arrange(desc(composite_zscore)) %>%
+  dplyr::mutate(`sample ID` = factor(`sample ID`, levels=`sample ID`))
+sample_zscore_4 <- sample_zscore
+
+ggplot(sample_zscore, 
+       aes(x=`sample ID`, y=composite_zscore, fill=`pheno type`)) +
+  geom_bar(stat="identity") +
+  theme_minimal() +
+  scale_fill_manual(values=my_color) +
+  labs(y="composite z-score (4)") +
+  theme(axis.text.x = element_text(angle = 90, size=7), 
+        axis.title.x=element_blank(),
+        legend.key.size = unit(0.4, 'cm'),
+        legend.position = c(0.9, 0.8), 
+        panel.grid.minor = element_blank())
+        #panel.grid.major = element_blank())
+
+ggsave(file=file.path(pkg_dir, "figures",
+                      "comb-cohort-composite-zscore-waterfall-panel4.pdf"),
+       width=6.5, height=2.5)  
+```
+
+**t-test between FSHD and controls**
+```{r composite-zscore-ttest-panal4, fig.cap="Boxplot of composite z-score by sample groups"}
+pval <- sample_zscore %>% 
+  spread(key=`pheno type`, composite_zscore) %>% 
+  summarize(pval=t.test(FSHD, Control)$p.value) %>% pull(pval)
+ggplot(sample_zscore, aes(x=`pheno type`, y=composite_zscore)) +
+  geom_boxplot(aes(color=`pheno type`), width=0.7, outlier.shape=NA,
+               show.legend = FALSE) +
+  theme_minimal() +
+  theme(axis.title.x = element_blank()) +
+  scale_color_manual(values=my_color) +
+  labs(y="Composite z-score (4)") +
+  annotate("text", x = 1.5, y = 8.75, vjust=0.5,
+           label = paste0("pval=", format(pval, digits=2)))
+ggsave(file.path(pkg_dir, "figures", "comb-cohort-composite-score-boxplot-panel4.pdf"), width=2, height=3)
+```
+
+```{r make-comb-cohort-composite-score-sheet, echo=FALSE}
+# suppl. table 5
+tb <- comb_tidy_norm %>% select(-ml) %>%
+  spread(key=complement, value=ml_norm) %>%
+  left_join(sample_zscore_4, by="sample ID") %>%
+  select(-`pheno type`) %>%
+  rename(composite_zscore_4 = composite_zscore) %>%
+  left_join(sample_zscore_7, by="sample ID") %>%
+  rename(compostie_zscore_7 = composite_zscore) %>%
+  select(-`pheno type`)
+writexl::write_xlsx(tb, 
+                    path=file.path(pkg_dir, "suppl_tables",
+                "suppl_table5_combined_cohort_norm_composite_score.xlsx"))
+```
+## Clinical severity score and D4Z4 repeats
+We determined whether Clinical Severity Score (CSS) or D4Z4 repeat number are correlated with complement levels by using Pearson correlation test. Code chunks below yield the results.
+
+### CSS vs. composite z-score
+```{r CSS-vs-complements}
+tmp <- .tidy_names(comb) %>% select(`sample ID`, CSS) %>%
+  left_join(sample_zscore, by="sample ID") %>%
+  filter(!is.na(CSS))
+# CSS vs. composite_zscore (4)
+cor(tmp$CSS, tmp$composite_zscore)  
+```
+
+### D4Z4 vs. composite z-score
+```{r D4Z4repeats-vs-complements}
+tmp <- .tidy_names(comb) %>% select(`sample ID`, `D4Z4 Repeats`) %>%
+  left_join(sample_zscore, by="sample ID") %>%
+  filter(!is.na(`D4Z4 Repeats`))
+# CSS vs. composite_zscore (4)
+cor(tmp$`D4Z4 Repeats`, tmp$composite_zscore)  
+```
+
+### D4Z4 vs. complement levels
+```{r D4Z4-vs-complements}
+
+```
