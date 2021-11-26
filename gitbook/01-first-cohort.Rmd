@@ -1,6 +1,7 @@
 # First cohort of FSHD and control plasma samples identifies complement components elevated in FSHD plasma {#first-cohort}
 
-In this chapter, we analyzed complement levels in 24 FSHD subjects and 12 controls from the first cohort.  The tested complement components included six components of the classical/lectin activation pathway (C1q, C4, MBL, C4a, C2, C4b), four of the alternative pathway (Factor H, Factor I, Factor D, Factor B), and four of the terminal effector pathway (C3, C5, C5a, sC5b-9). 
+The first cohort consists of 24 FSHD and 12 control plasma samples.
+In this chapter, we compared the protein levels of complement components in  FSHDs and controls from the first cohort.  The tested complement components included six components of the classical/lectin activation pathway (C1q, C4, MBL, C4a, C2, C4b), four of the alternative pathway (Factor H, Factor I, Factor D, Factor B), and four of the terminal effector pathway (C3, C5, C5a, sC5b-9). 
 
 ```{r setup-1, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
@@ -34,38 +35,44 @@ mean_color <- "#FF0000"
 ## Demographic distribution
 
 **Age distribution of FSHD**
-```{r demographi-distribution-fshd-1}
+```{r demographic-distribution-fshd-1}
 cohort1 %>% filter(`pheno type`=="FSHD") %>%
   summarise(min=min(`Visit Age`), max=max(`Visit Age`),
-            mean=mean(`Visit Age`), sd=sd(`Visit Age`))
+            mean=mean(`Visit Age`), sd=sd(`Visit Age`)) %>%
+  knitr::kable(caption="FSHD: age distribution -- min, max, mean, and standard deviation. ")
 ```
 
 **Age distribution of controls**
-```{r demographi-distribution-control-1}
+```{r demographic-distribution-control-1}
 cohort1 %>% filter(`pheno type`=="Control") %>%
   summarise(min=min(`Visit Age`), max=max(`Visit Age`),
-            mean=mean(`Visit Age`), sd=sd(`Visit Age`))
+            mean=mean(`Visit Age`), sd=sd(`Visit Age`)) %>%
+  knitr::kable(caption="Control: age distribution -- min, max, mean, and standard deviation.")
 ```
 
 **Gender distribution of FSHD**
 ```{r gender-distribution-fshd-1}
 cohort1 %>% filter(`pheno type`=="FSHD") %>%
   summarize(male = sum(`Sex` == "M") / nrow(.),
-            female = sum(`Sex` == "F") / nrow(.))
+            female = sum(`Sex` == "F") / nrow(.)) %>%
+  knitr::kable(caption="FSHD gender distribution.")
 ```
 
 **Gender distribution of Controls**
 ```{r gender-distribution-control-1}
 cohort1 %>% filter(`pheno type`=="Control") %>%
   summarize(male = sum(`Sex` == "M") / nrow(.),
-            female = sum(`Sex` == "F") / nrow(.))
+            female = sum(`Sex` == "F") / nrow(.)) %>%
+  knitr::kable(caption="Control gender distribution.")
 ```
 
 ## Statistics testing
-The code chunks below perform      
-- t-testing comparing the complement components in FSHD and control groups  
-- visualization of p-values (bar plot; Fig. 2a) and complement levels distribution in each group (violin plot; Fig. 2b)     
-- heatmap coupled with hierarchical cluster analysis (Suppl. Fig. S1)     
+
+The $t$-test comparing FSHDs and controls rendered three components, sC5b-9, C3, and C2, showing increased levels in FSHD. The code chunks below perform  
+
+- $t$-testing comparing the complement components in FSHD and control groups  
+- barplot of p-values (Figure \@ref(fig:cohort1-ttest-barplot); Fig. 2a) and complement levels distribution in each group (Figure \@ref(fig:cohort1-violin); Fig. 2b)       
+- heatmap and hierarchical cluster analysis (Figure \@ref(fig:cohort1-heatmap); Suppl. Fig. S1)       
 
 ```{r tidy-cohort1}
 # use .tidy_names() from scripts/tools.R" to tidy the name of cohort1
@@ -114,9 +121,10 @@ ggsave(file=file.path(pkg_dir, "figures", "cohort1-ttest-pvalue-bar.pdf"),
        width=5, height=3)  
 ```
 
-### Visualization
 
-**Violin plot of 14 complement components measurements:**
+### Violin plot of 14 complement components measurements
+
+
 ```{r cohort1-violin, fig.cap="14 complement components measurements grouped by FSHD and control samples."}
 cohort1_tidy %>%
   ggplot(aes(x=pheno_type, y=ml)) +
@@ -138,7 +146,7 @@ ggsave(file=file.path(pkg_dir, "figures", "cohort1-violin-14components.pdf"),
        width=6.5, height=6)
 ```
 
-**Heatmap and cluster analysis:**
+### Heatmap and cluster analysis
 ```{r cohort1-heatmap, fig.height=8, fig.cap="Cohort1: heatmap of the normalized matrix."}
 norm_data <- cohort1_tidy_norm %>%
   select(-ml) %>%
