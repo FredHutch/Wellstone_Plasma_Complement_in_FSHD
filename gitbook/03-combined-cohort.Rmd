@@ -21,6 +21,7 @@ suppressPackageStartupMessages(library(broom))
 suppressPackageStartupMessages(library(pheatmap))
 suppressPackageStartupMessages(library(viridis))
 suppressPackageStartupMessages(library(pheatmap))
+suppressPackageStartupMessages(library(latex2exp))
 
 pkg_dir <- "~/CompBio/Wellstone_Plasma_Complement_in_FSHD"
 source(file.path(pkg_dir, "scripts", "tools.R"))
@@ -69,7 +70,7 @@ comb_ttest <- comb_tidy %>%
   mutate(candidate = ifelse(t_test < 0.05, "Yes", "No")) %>%
   arrange(desc(t_test)) %>%
   mutate(complement=factor(complement, levels=complement)) %>%
-  mutate(formated_p = format(t_test, digit=2))
+  mutate(formated_p = format(t_test, digit=1))
 ```
 
 **$t$-test barplot (Suppl. Fig. 3a)**
@@ -79,8 +80,8 @@ ggplot(comb_ttest, aes(x=complement, y=log10Pval, fill=candidate)) +
   coord_flip() +
   scale_fill_manual(values=c("#999999", "#E69F00")) +
   theme_bw() +
-  labs(title="Discovery set: t-statistics and p-values", 
-       y=expression(-10*Log[10](p-value) %*% sign(t-stats))) +
+  labs(title=TeX("Combined cohort: $t$-tests"), x="Complements",
+       y=TeX("$-10\\log_{10}(\\mathit{p}-val) \\times sign(\\mathit{t}-stats)$")) +
   geom_text(aes(label=formated_p), vjust=0.5, hjust=0.5, color="gray10",
             position = position_dodge(1), size=3)
 ggsave(file=file.path(pkg_dir, "figures", "comb-cohort-pvalue-bar.pdf"),
@@ -366,10 +367,11 @@ ggplot(aes(x=pheno_type, y=ml)) +
     scale_color_manual(values=my_color) +
     theme(legend.position="none", 
           axis.title.x = element_blank()) +
-    labs(y=expression(mu*g / ml)) 
+    labs(y=expression(mu*g / ml), 
+         title="Combind cohort: selected panel") 
   
 ggsave(file=file.path(pkg_dir, "figures",
-                      "comb-cohort-violin-panel4-boxplot.pdf"),
+                      "comb-cohort-violin-panel4-violin.pdf"),
        width=5, height=2.5)
 ```
 

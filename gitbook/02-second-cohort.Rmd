@@ -263,6 +263,7 @@ ggplot(paired, aes(x=plasma1, y=plasma2)) +
   facet_wrap(~ complement, nrow=3, scale="free") +
   geom_abline(slope=1, intercept=0, linetype="dashed") +
   theme_minimal() +
+  labs(title="Second cohort: plasma1 vs. plasma2")
   geom_text(
     size    = 4,
     data    = lm_2,

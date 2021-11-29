@@ -24,7 +24,7 @@
 <meta name="author" content="Chao-Jen Wong" />
 
 
-<meta name="date" content="2021-11-26" />
+<meta name="date" content="2021-11-29" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -209,18 +209,19 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <a class="sourceLine" id="cb1-7" data-line-number="7"><span class="kw">suppressPackageStartupMessages</span>(<span class="kw">library</span>(pheatmap))</a>
 <a class="sourceLine" id="cb1-8" data-line-number="8"><span class="kw">suppressPackageStartupMessages</span>(<span class="kw">library</span>(viridis))</a>
 <a class="sourceLine" id="cb1-9" data-line-number="9"><span class="kw">suppressPackageStartupMessages</span>(<span class="kw">library</span>(pheatmap))</a>
-<a class="sourceLine" id="cb1-10" data-line-number="10"></a>
-<a class="sourceLine" id="cb1-11" data-line-number="11">pkg_dir &lt;-<span class="st"> &quot;~/CompBio/Wellstone_Plasma_Complement_in_FSHD&quot;</span></a>
-<a class="sourceLine" id="cb1-12" data-line-number="12"><span class="kw">source</span>(<span class="kw">file.path</span>(pkg_dir, <span class="st">&quot;scripts&quot;</span>, <span class="st">&quot;tools.R&quot;</span>))</a>
-<a class="sourceLine" id="cb1-13" data-line-number="13">fig_dir &lt;-<span class="st"> </span><span class="kw">file.path</span>(pkg_dir, <span class="st">&quot;figures&quot;</span>)</a>
-<a class="sourceLine" id="cb1-14" data-line-number="14"><span class="co"># get combinded cohort</span></a>
-<a class="sourceLine" id="cb1-15" data-line-number="15">comb &lt;-<span class="st"> </span><span class="kw">get</span>(<span class="kw">load</span>(<span class="kw">file.path</span>(pkg_dir, <span class="st">&quot;data&quot;</span>, <span class="st">&quot;table_3.rda&quot;</span>)))</a>
-<a class="sourceLine" id="cb1-16" data-line-number="16">components &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Bb&quot;</span>, <span class="st">&quot;C2&quot;</span>, <span class="st">&quot;C4b&quot;</span>, <span class="st">&quot;C5&quot;</span>, <span class="st">&quot;C5a&quot;</span>, <span class="st">&quot;Factor D&quot;</span>, <span class="st">&quot;MBL&quot;</span>, <span class="st">&quot;Factor I&quot;</span>,</a>
-<a class="sourceLine" id="cb1-17" data-line-number="17">                <span class="st">&quot;C1q&quot;</span>, <span class="st">&quot;C3&quot;</span>, <span class="st">&quot;C4&quot;</span>, <span class="st">&quot;Factor B&quot;</span>, <span class="st">&quot;Factor H&quot;</span>,</a>
-<a class="sourceLine" id="cb1-18" data-line-number="18">                <span class="st">&quot;C4a&quot;</span>, <span class="st">&quot;sC5b-9&quot;</span>)</a>
-<a class="sourceLine" id="cb1-19" data-line-number="19">my_color &lt;-<span class="st"> </span><span class="kw">viridis_pal</span>(<span class="dt">direction =</span> <span class="dv">-1</span>)(<span class="dv">8</span>)[<span class="kw">c</span>(<span class="dv">3</span>, <span class="dv">6</span>)] <span class="co"># control and FSHD</span></a>
-<a class="sourceLine" id="cb1-20" data-line-number="20"><span class="kw">names</span>(my_color) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Control&quot;</span>, <span class="st">&quot;FSHD&quot;</span>)</a>
-<a class="sourceLine" id="cb1-21" data-line-number="21">mean_color &lt;-<span class="st"> &quot;#FF0000&quot;</span></a></code></pre></div>
+<a class="sourceLine" id="cb1-10" data-line-number="10"><span class="kw">suppressPackageStartupMessages</span>(<span class="kw">library</span>(latex2exp))</a>
+<a class="sourceLine" id="cb1-11" data-line-number="11"></a>
+<a class="sourceLine" id="cb1-12" data-line-number="12">pkg_dir &lt;-<span class="st"> &quot;~/CompBio/Wellstone_Plasma_Complement_in_FSHD&quot;</span></a>
+<a class="sourceLine" id="cb1-13" data-line-number="13"><span class="kw">source</span>(<span class="kw">file.path</span>(pkg_dir, <span class="st">&quot;scripts&quot;</span>, <span class="st">&quot;tools.R&quot;</span>))</a>
+<a class="sourceLine" id="cb1-14" data-line-number="14">fig_dir &lt;-<span class="st"> </span><span class="kw">file.path</span>(pkg_dir, <span class="st">&quot;figures&quot;</span>)</a>
+<a class="sourceLine" id="cb1-15" data-line-number="15"><span class="co"># get combinded cohort</span></a>
+<a class="sourceLine" id="cb1-16" data-line-number="16">comb &lt;-<span class="st"> </span><span class="kw">get</span>(<span class="kw">load</span>(<span class="kw">file.path</span>(pkg_dir, <span class="st">&quot;data&quot;</span>, <span class="st">&quot;table_3.rda&quot;</span>)))</a>
+<a class="sourceLine" id="cb1-17" data-line-number="17">components &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Bb&quot;</span>, <span class="st">&quot;C2&quot;</span>, <span class="st">&quot;C4b&quot;</span>, <span class="st">&quot;C5&quot;</span>, <span class="st">&quot;C5a&quot;</span>, <span class="st">&quot;Factor D&quot;</span>, <span class="st">&quot;MBL&quot;</span>, <span class="st">&quot;Factor I&quot;</span>,</a>
+<a class="sourceLine" id="cb1-18" data-line-number="18">                <span class="st">&quot;C1q&quot;</span>, <span class="st">&quot;C3&quot;</span>, <span class="st">&quot;C4&quot;</span>, <span class="st">&quot;Factor B&quot;</span>, <span class="st">&quot;Factor H&quot;</span>,</a>
+<a class="sourceLine" id="cb1-19" data-line-number="19">                <span class="st">&quot;C4a&quot;</span>, <span class="st">&quot;sC5b-9&quot;</span>)</a>
+<a class="sourceLine" id="cb1-20" data-line-number="20">my_color &lt;-<span class="st"> </span><span class="kw">viridis_pal</span>(<span class="dt">direction =</span> <span class="dv">-1</span>)(<span class="dv">8</span>)[<span class="kw">c</span>(<span class="dv">3</span>, <span class="dv">6</span>)] <span class="co"># control and FSHD</span></a>
+<a class="sourceLine" id="cb1-21" data-line-number="21"><span class="kw">names</span>(my_color) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Control&quot;</span>, <span class="st">&quot;FSHD&quot;</span>)</a>
+<a class="sourceLine" id="cb1-22" data-line-number="22">mean_color &lt;-<span class="st"> &quot;#FF0000&quot;</span></a></code></pre></div>
 <p>First of all, we tidy the dataset.</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">comb_tidy &lt;-<span class="st"> </span><span class="kw">.tidy_names</span>(comb) <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb2-2" data-line-number="2"><span class="st">  </span><span class="kw">select</span>(<span class="st">`</span><span class="dt">sample ID</span><span class="st">`</span>, pheno_type, components) <span class="op">%&gt;%</span></a>
@@ -250,15 +251,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <a class="sourceLine" id="cb3-14" data-line-number="14"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">candidate =</span> <span class="kw">ifelse</span>(t_test <span class="op">&lt;</span><span class="st"> </span><span class="fl">0.05</span>, <span class="st">&quot;Yes&quot;</span>, <span class="st">&quot;No&quot;</span>)) <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb3-15" data-line-number="15"><span class="st">  </span><span class="kw">arrange</span>(<span class="kw">desc</span>(t_test)) <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb3-16" data-line-number="16"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">complement=</span><span class="kw">factor</span>(complement, <span class="dt">levels=</span>complement)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb3-17" data-line-number="17"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">formated_p =</span> <span class="kw">format</span>(t_test, <span class="dt">digit=</span><span class="dv">2</span>))</a></code></pre></div>
+<a class="sourceLine" id="cb3-17" data-line-number="17"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">formated_p =</span> <span class="kw">format</span>(t_test, <span class="dt">digit=</span><span class="dv">1</span>))</a></code></pre></div>
 <p><strong><span class="math inline">\(t\)</span>-test barplot (Suppl. Fig. 3a)</strong></p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="kw">ggplot</span>(comb_ttest, <span class="kw">aes</span>(<span class="dt">x=</span>complement, <span class="dt">y=</span>log10Pval, <span class="dt">fill=</span>candidate)) <span class="op">+</span></a>
 <a class="sourceLine" id="cb4-2" data-line-number="2"><span class="st">  </span><span class="kw">geom_bar</span>(<span class="dt">stat=</span><span class="st">&quot;identity&quot;</span>, <span class="dt">width=</span><span class="fl">0.7</span>, <span class="dt">show.legend=</span><span class="ot">FALSE</span>) <span class="op">+</span></a>
 <a class="sourceLine" id="cb4-3" data-line-number="3"><span class="st">  </span><span class="kw">coord_flip</span>() <span class="op">+</span></a>
 <a class="sourceLine" id="cb4-4" data-line-number="4"><span class="st">  </span><span class="kw">scale_fill_manual</span>(<span class="dt">values=</span><span class="kw">c</span>(<span class="st">&quot;#999999&quot;</span>, <span class="st">&quot;#E69F00&quot;</span>)) <span class="op">+</span></a>
 <a class="sourceLine" id="cb4-5" data-line-number="5"><span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb4-6" data-line-number="6"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">title=</span><span class="st">&quot;Discovery set: t-statistics and p-values&quot;</span>, </a>
-<a class="sourceLine" id="cb4-7" data-line-number="7">       <span class="dt">y=</span><span class="kw">expression</span>(<span class="op">-</span><span class="dv">10</span><span class="op">*</span>Log[<span class="dv">10</span>](p<span class="op">-</span>value) <span class="op">%*%</span><span class="st"> </span><span class="kw">sign</span>(t<span class="op">-</span>stats))) <span class="op">+</span></a>
+<a class="sourceLine" id="cb4-6" data-line-number="6"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">title=</span><span class="kw">TeX</span>(<span class="st">&quot;Combined cohort: $t$-tests&quot;</span>), <span class="dt">x=</span><span class="st">&quot;Complements&quot;</span>,</a>
+<a class="sourceLine" id="cb4-7" data-line-number="7">       <span class="dt">y=</span><span class="kw">TeX</span>(<span class="st">&quot;$-10</span><span class="ch">\\</span><span class="st">log_{10}(</span><span class="ch">\\</span><span class="st">mathit{p}-val) </span><span class="ch">\\</span><span class="st">times sign(</span><span class="ch">\\</span><span class="st">mathit{t}-stats)$&quot;</span>)) <span class="op">+</span></a>
 <a class="sourceLine" id="cb4-8" data-line-number="8"><span class="st">  </span><span class="kw">geom_text</span>(<span class="kw">aes</span>(<span class="dt">label=</span>formated_p), <span class="dt">vjust=</span><span class="fl">0.5</span>, <span class="dt">hjust=</span><span class="fl">0.5</span>, <span class="dt">color=</span><span class="st">&quot;gray10&quot;</span>,</a>
 <a class="sourceLine" id="cb4-9" data-line-number="9">            <span class="dt">position =</span> <span class="kw">position_dodge</span>(<span class="dv">1</span>), <span class="dt">size=</span><span class="dv">3</span>)</a></code></pre></div>
 <div class="figure"><span id="fig:comb-ttest-barplot"></span>
@@ -489,7 +490,8 @@ Figure 3.7: Composite zscore by sample groups (Suppl. Fig. 3f).
 <a class="sourceLine" id="cb21-14" data-line-number="14"><span class="st">    </span><span class="kw">scale_color_manual</span>(<span class="dt">values=</span>my_color) <span class="op">+</span></a>
 <a class="sourceLine" id="cb21-15" data-line-number="15"><span class="st">    </span><span class="kw">theme</span>(<span class="dt">legend.position=</span><span class="st">&quot;none&quot;</span>, </a>
 <a class="sourceLine" id="cb21-16" data-line-number="16">          <span class="dt">axis.title.x =</span> <span class="kw">element_blank</span>()) <span class="op">+</span></a>
-<a class="sourceLine" id="cb21-17" data-line-number="17"><span class="st">    </span><span class="kw">labs</span>(<span class="dt">y=</span><span class="kw">expression</span>(mu<span class="op">*</span>g <span class="op">/</span><span class="st"> </span>ml)) </a></code></pre></div>
+<a class="sourceLine" id="cb21-17" data-line-number="17"><span class="st">    </span><span class="kw">labs</span>(<span class="dt">y=</span><span class="kw">expression</span>(mu<span class="op">*</span>g <span class="op">/</span><span class="st"> </span>ml), </a>
+<a class="sourceLine" id="cb21-18" data-line-number="18">         <span class="dt">title=</span><span class="st">&quot;Combind cohort: selected panel&quot;</span>) </a></code></pre></div>
 <div class="figure"><span id="fig:comb-cohort-boxplot-panel4"></span>
 <img src="gitbook_files/figure-html/comb-cohort-boxplot-panel4-1.png" alt="Violin plot of the panel of four by sample groups." width="672" />
 <p class="caption">
@@ -497,7 +499,7 @@ Figure 3.8: Violin plot of the panel of four by sample groups.
 </p>
 </div>
 <div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb22-1" data-line-number="1"><span class="kw">ggsave</span>(<span class="dt">file=</span><span class="kw">file.path</span>(pkg_dir, <span class="st">&quot;figures&quot;</span>,</a>
-<a class="sourceLine" id="cb22-2" data-line-number="2">                      <span class="st">&quot;comb-cohort-violin-panel4-boxplot.pdf&quot;</span>),</a>
+<a class="sourceLine" id="cb22-2" data-line-number="2">                      <span class="st">&quot;comb-cohort-violin-panel4-violin.pdf&quot;</span>),</a>
 <a class="sourceLine" id="cb22-3" data-line-number="3">       <span class="dt">width=</span><span class="dv">5</span>, <span class="dt">height=</span><span class="fl">2.5</span>)</a></code></pre></div>
 </div>
 <div id="heatmapclustering-1" class="section level3">
