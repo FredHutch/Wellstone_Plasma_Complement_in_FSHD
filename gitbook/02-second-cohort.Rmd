@@ -139,7 +139,9 @@ ggsave(file=file.path(pkg_dir, "figures", "cohort2-violin-15components.pdf"),
 
 
 ## Controls from two cohorts
-Suppl. Fig. 2a
+Shown below is a violin plot of complement component levels in controls from first and second cohorts. 
+
+Code chunk below made Suppl. Fig. 2a.
 
 ```{r get_cohort1_tidy}
 # get cohort1 and tidy up the control samples from 1st and 2nd cohorts
@@ -180,7 +182,8 @@ ggsave(file.path(pkg_dir, "figures", "controls-two-cohorts-violin.pdf"),
 ```
 
 ## Stability of FSHDs between two visits 
-The first and the second visits are names `plasma1` and `plasma2` respectively. The code chuck below reproduce Suppl. Fig. 2b. 
+The FSHD subjects' first and the second visits are named `plasma1` and `plasma2` respectively. We made a trajectory plot -- `plasma 1` to `plasma 2` -- for each of the complement component. There are total 41 FSHD subjects (41 dots on `plasma 1`) and only 20 have the second visits. The code chuck below reproduce Suppl. Fig. 2b. The 
+
 ```{r plot-cohort2-plasma1-pairs-trajectory, fig.height=10, fig.cap="A trajectory plot of complement levels between the first (plasma1) and second (plasma2) plasma samples of individuals. The gray area presents the range of complement levels in the second cohort's controls."}
 cohort2_pairs <- 
   get(load(file.path(pkg_dir, "data", "table_4_update.rda")))  %>%
@@ -209,4 +212,72 @@ ggplot(cohort2_pairs, aes(x=Plasma, y=ml)) +
   labs(title="Cohort2: plasma1 vs. plasma2", 
        y=expression(mu*g / ml))
 ggsave(file.path(pkg_dir, "figures", "Cohort2-plasma-pairs-trajectoryplot.pdf"), width=7.5, height=6)
+```
+
+```{r scatter-between-two-visits, fig.height=10}
+
+all_cohort2_visits <- 
+  get(load(file.path(pkg_dir, "data", "table_4_update.rda")))  %>%
+  .tidy_names(.) %>% 
+  filter(Cohort == "cohort2", pheno_type == "FSHD") %>%
+  select(`sample ID`, components, Plasma, `patient ID`) 
+
+paired_ID <- all_cohort2_visits %>% 
+  filter(Plasma == "plasma2") %>% pull(`patient ID`) 
+
+paired <- all_cohort2_visits %>% 
+  filter(`patient ID` %in% paired_ID) %>% 
+  select(-`sample ID`) %>%
+  gather(key=complement, value=ml, -Plasma, -`patient ID`) %>%
+  spread(Plasma, ml)
+
+lm_eqn <- function(df){
+    m <- lm(plasma2 ~ plasma1, df);
+    eq <- substitute(italic(y) == a + b %.% italic(x)*","~~italic(r)~"="~r2,
+         list(a = format(unname(coef(m)[1]), digits = 2),
+              b = format(unname(coef(m)[2]), digits = 2),
+              r2 = format(sqrt(summary(m)$r.squared), digits = 3)))
+    data.frame(label=as.character(as.expression(eq)))
+}
+
+lm_r2 <- function(df) {
+  m <- lm(plasma2 ~ plasma1, df)
+  r <- format(sqrt(summary(m)$r.squared), digits = 3)
+  data.frame(label=paste0("r=", r))
+}
+
+lm_2 <- paired %>% group_by(complement) %>%
+ group_modify( ~ lm_r2(.x))
+
+lm <- paired %>% group_by(complement) %>%
+  group_modify(~ broom::tidy(lm(plasma2 ~ plasma1, data = .x)))
+
+
+ggplot(paired, aes(x=plasma1, y=plasma2)) +
+  geom_point() +
+  geom_smooth(method="lm", se=FALSE) +
+  facet_wrap(~ complement, nrow=3, scale="free") +
+  geom_abline(slope=1, intercept=0, linetype="dashed") +
+  theme_minimal() +
+  geom_text(
+    size    = 4,
+    data    = lm_2,
+    mapping = aes(x = Inf, y = Inf, label = label),
+    hjust   = 1.7,
+    vjust   = 1.5
+  ) +
+  theme(panel.grid.major = element_blank(), 
+        panel.grid.minor = element_blank())
+
+ggsave(file.path(pkg_dir, "figures", 
+                 "Cohort2-plasma-pairs-scatterplot.pdf"), width=7.5, height=6)
+```
+note: higher R-squared values represent smaller differences between the observed data and the fitted values.
+note: in linear regression model, the p-value for each term tests the null hypothesis that the coefficient (slope) is equal to zero (no effect). A low p-value (< 0.05) indicates that you can reject the null hypothesis. In other words,  a low p-value indicates the changes in the predictor's (plasma2) value are related to changes in the response variable (plasma1). Conversely, a larger (insignificant) p-value suggests that changes in the predictor are not associated with changes in the response.
+
+```{r show-lm-p-value}
+#broom::tidy
+paired %>% group_by(complement) %>%
+  group_modify(~ broom::glance(lm(plasma2 ~ plasma1, data = .x))) %>%
+  knitr::kable()
 ```

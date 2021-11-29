@@ -24,7 +24,7 @@
 <meta name="author" content="Chao-Jen Wong" />
 
 
-<meta name="date" content="2021-11-26" />
+<meta name="date" content="2021-11-29" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -150,14 +150,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="2.1" data-path="second-cohort.html"><a href="second-cohort.html#demographic-distribution-1"><i class="fa fa-check"></i><b>2.1</b> Demographic distribution</a></li>
 <li class="chapter" data-level="2.2" data-path="second-cohort.html"><a href="second-cohort.html#statistics-testing-1"><i class="fa fa-check"></i><b>2.2</b> Statistics testing</a><ul>
 <li class="chapter" data-level="2.2.1" data-path="second-cohort.html"><a href="second-cohort.html#t-tests-1"><i class="fa fa-check"></i><b>2.2.1</b> t-tests</a></li>
-<li class="chapter" data-level="2.2.2" data-path="second-cohort.html"><a href="second-cohort.html#visualization"><i class="fa fa-check"></i><b>2.2.2</b> Visualization</a></li>
+<li class="chapter" data-level="2.2.2" data-path="second-cohort.html"><a href="second-cohort.html#violin-plot-of-15-complement-components-measurements"><i class="fa fa-check"></i><b>2.2.2</b> Violin plot of 15 complement components measurements</a></li>
 </ul></li>
-<li class="chapter" data-level="2.3" data-path="second-cohort.html"><a href="second-cohort.html#complement-levels-of-controls-from-two-cohorts"><i class="fa fa-check"></i><b>2.3</b> Complement levels of controls from two cohorts</a></li>
+<li class="chapter" data-level="2.3" data-path="second-cohort.html"><a href="second-cohort.html#controls-from-two-cohorts"><i class="fa fa-check"></i><b>2.3</b> Controls from two cohorts</a></li>
 <li class="chapter" data-level="2.4" data-path="second-cohort.html"><a href="second-cohort.html#stability-of-fshds-between-two-visits"><i class="fa fa-check"></i><b>2.4</b> Stability of FSHDs between two visits</a></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="combined-cohort.html"><a href="combined-cohort.html"><i class="fa fa-check"></i><b>3</b> Combined cohort</a><ul>
 <li class="chapter" data-level="3.1" data-path="combined-cohort.html"><a href="combined-cohort.html#explore-components-best-distinguish-fshd-from-controls"><i class="fa fa-check"></i><b>3.1</b> Explore components best distinguish FSHD from controls</a><ul>
-<li class="chapter" data-level="3.1.1" data-path="combined-cohort.html"><a href="combined-cohort.html#t-test"><i class="fa fa-check"></i><b>3.1.1</b> t-test</a></li>
+<li class="chapter" data-level="3.1.1" data-path="combined-cohort.html"><a href="combined-cohort.html#t-test"><i class="fa fa-check"></i><b>3.1.1</b> <span class="math inline">\(t\)</span>-test</a></li>
 <li class="chapter" data-level="3.1.2" data-path="combined-cohort.html"><a href="combined-cohort.html#correlation-tests"><i class="fa fa-check"></i><b>3.1.2</b> Correlation tests</a></li>
 </ul></li>
 <li class="chapter" data-level="3.2" data-path="combined-cohort.html"><a href="combined-cohort.html#panel-of-seven---classification-and-composite-z-score"><i class="fa fa-check"></i><b>3.2</b> Panel of seven - Classification and composite z-score</a><ul>
@@ -173,7 +173,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="3.4" data-path="combined-cohort.html"><a href="combined-cohort.html#clinical-severity-score-and-d4z4-repeats"><i class="fa fa-check"></i><b>3.4</b> Clinical severity score and D4Z4 repeats</a><ul>
 <li class="chapter" data-level="3.4.1" data-path="combined-cohort.html"><a href="combined-cohort.html#css-vs.composite-z-score"><i class="fa fa-check"></i><b>3.4.1</b> CSS vs. composite z-score</a></li>
 <li class="chapter" data-level="3.4.2" data-path="combined-cohort.html"><a href="combined-cohort.html#d4z4-vs.composite-z-score"><i class="fa fa-check"></i><b>3.4.2</b> D4Z4 vs. composite z-score</a></li>
-<li class="chapter" data-level="3.4.3" data-path="combined-cohort.html"><a href="combined-cohort.html#d4z4-vs.complement-levels"><i class="fa fa-check"></i><b>3.4.3</b> D4Z4 vs. complement levels</a></li>
 </ul></li>
 </ul></li>
 <li class="divider"></li>
@@ -210,17 +209,18 @@ In this chapter, we compared the protein levels of complement components in FSHD
 <a class="sourceLine" id="cb1-8" data-line-number="8"><span class="kw">suppressPackageStartupMessages</span>(<span class="kw">library</span>(pheatmap))</a>
 <a class="sourceLine" id="cb1-9" data-line-number="9"><span class="kw">suppressPackageStartupMessages</span>(<span class="kw">library</span>(viridis))</a>
 <a class="sourceLine" id="cb1-10" data-line-number="10"><span class="kw">suppressPackageStartupMessages</span>(<span class="kw">library</span>(pheatmap))</a>
-<a class="sourceLine" id="cb1-11" data-line-number="11">pkg_dir &lt;-<span class="st"> &quot;~/CompBio/Wellstone_Plasma_Complement_in_FSHD&quot;</span></a>
-<a class="sourceLine" id="cb1-12" data-line-number="12"><span class="kw">source</span>(<span class="kw">file.path</span>(pkg_dir, <span class="st">&quot;scripts&quot;</span>, <span class="st">&quot;tools.R&quot;</span>))</a>
-<a class="sourceLine" id="cb1-13" data-line-number="13">fig_dir &lt;-<span class="st"> </span><span class="kw">file.path</span>(pkg_dir, <span class="st">&quot;figures&quot;</span>)</a>
-<a class="sourceLine" id="cb1-14" data-line-number="14">cohort1 &lt;-<span class="st"> </span><span class="kw">get</span>(<span class="kw">load</span>(<span class="kw">file.path</span>(pkg_dir, <span class="st">&quot;data&quot;</span>, <span class="st">&quot;table_1.rda&quot;</span>)))</a>
-<a class="sourceLine" id="cb1-15" data-line-number="15">components &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;C2&quot;</span>, <span class="st">&quot;C4b&quot;</span>, <span class="st">&quot;C5&quot;</span>, <span class="st">&quot;C5a&quot;</span>, <span class="st">&quot;Factor D&quot;</span>, <span class="st">&quot;MBL&quot;</span>, <span class="st">&quot;Factor I&quot;</span>,</a>
-<a class="sourceLine" id="cb1-16" data-line-number="16">                <span class="st">&quot;C1q&quot;</span>, <span class="st">&quot;C3&quot;</span>, <span class="st">&quot;C4&quot;</span>, <span class="st">&quot;Factor B&quot;</span>, <span class="st">&quot;Factor H&quot;</span>,</a>
-<a class="sourceLine" id="cb1-17" data-line-number="17">                <span class="st">&quot;C4a&quot;</span>, <span class="st">&quot;sC5b-9&quot;</span>)</a>
-<a class="sourceLine" id="cb1-18" data-line-number="18">my_color &lt;-<span class="st"> </span><span class="kw">viridis_pal</span>(<span class="dt">direction =</span> <span class="dv">-1</span>)(<span class="dv">8</span>)[<span class="kw">c</span>(<span class="dv">3</span>, <span class="dv">6</span>)] <span class="co"># control and FSHD</span></a>
-<a class="sourceLine" id="cb1-19" data-line-number="19"><span class="kw">names</span>(my_color) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Control&quot;</span>, <span class="st">&quot;FSHD&quot;</span>)</a>
-<a class="sourceLine" id="cb1-20" data-line-number="20">mean_color &lt;-<span class="st"> &quot;#FF0000&quot;</span></a>
-<a class="sourceLine" id="cb1-21" data-line-number="21"><span class="co">#my_color &lt;- c(Control=&quot;#31A345&quot;, FSHD=&quot;#3182BD&quot;)</span></a></code></pre></div>
+<a class="sourceLine" id="cb1-11" data-line-number="11"><span class="kw">suppressPackageStartupMessages</span>(<span class="kw">library</span>(latex2exp))</a>
+<a class="sourceLine" id="cb1-12" data-line-number="12">pkg_dir &lt;-<span class="st"> &quot;~/CompBio/Wellstone_Plasma_Complement_in_FSHD&quot;</span></a>
+<a class="sourceLine" id="cb1-13" data-line-number="13"><span class="kw">source</span>(<span class="kw">file.path</span>(pkg_dir, <span class="st">&quot;scripts&quot;</span>, <span class="st">&quot;tools.R&quot;</span>))</a>
+<a class="sourceLine" id="cb1-14" data-line-number="14">fig_dir &lt;-<span class="st"> </span><span class="kw">file.path</span>(pkg_dir, <span class="st">&quot;figures&quot;</span>)</a>
+<a class="sourceLine" id="cb1-15" data-line-number="15">cohort1 &lt;-<span class="st"> </span><span class="kw">get</span>(<span class="kw">load</span>(<span class="kw">file.path</span>(pkg_dir, <span class="st">&quot;data&quot;</span>, <span class="st">&quot;table_1.rda&quot;</span>)))</a>
+<a class="sourceLine" id="cb1-16" data-line-number="16">components &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;C2&quot;</span>, <span class="st">&quot;C4b&quot;</span>, <span class="st">&quot;C5&quot;</span>, <span class="st">&quot;C5a&quot;</span>, <span class="st">&quot;Factor D&quot;</span>, <span class="st">&quot;MBL&quot;</span>, <span class="st">&quot;Factor I&quot;</span>,</a>
+<a class="sourceLine" id="cb1-17" data-line-number="17">                <span class="st">&quot;C1q&quot;</span>, <span class="st">&quot;C3&quot;</span>, <span class="st">&quot;C4&quot;</span>, <span class="st">&quot;Factor B&quot;</span>, <span class="st">&quot;Factor H&quot;</span>,</a>
+<a class="sourceLine" id="cb1-18" data-line-number="18">                <span class="st">&quot;C4a&quot;</span>, <span class="st">&quot;sC5b-9&quot;</span>)</a>
+<a class="sourceLine" id="cb1-19" data-line-number="19">my_color &lt;-<span class="st"> </span><span class="kw">viridis_pal</span>(<span class="dt">direction =</span> <span class="dv">-1</span>)(<span class="dv">8</span>)[<span class="kw">c</span>(<span class="dv">3</span>, <span class="dv">6</span>)] <span class="co"># control and FSHD</span></a>
+<a class="sourceLine" id="cb1-20" data-line-number="20"><span class="kw">names</span>(my_color) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Control&quot;</span>, <span class="st">&quot;FSHD&quot;</span>)</a>
+<a class="sourceLine" id="cb1-21" data-line-number="21">mean_color &lt;-<span class="st"> &quot;#FF0000&quot;</span></a>
+<a class="sourceLine" id="cb1-22" data-line-number="22"><span class="co">#my_color &lt;- c(Control=&quot;#31A345&quot;, FSHD=&quot;#3182BD&quot;)</span></a></code></pre></div>
 <div id="demographic-distribution" class="section level2">
 <h2><span class="header-section-number">1.1</span> Demographic distribution</h2>
 <p><strong>Age distribution of FSHD</strong></p>
@@ -405,24 +405,26 @@ female
 <a class="sourceLine" id="cb7-14" data-line-number="14"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">candidate =</span> <span class="kw">ifelse</span>(t_test <span class="op">&lt;</span><span class="st"> </span><span class="fl">0.05</span>, <span class="st">&quot;Yes&quot;</span>, <span class="st">&quot;No&quot;</span>)) <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb7-15" data-line-number="15"><span class="st">  </span><span class="kw">arrange</span>(<span class="kw">desc</span>(t_test)) <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb7-16" data-line-number="16"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">complement=</span><span class="kw">factor</span>(complement, <span class="dt">levels=</span>complement)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb7-17" data-line-number="17"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">formated_p =</span> <span class="kw">format</span>(t_test, <span class="dt">digit=</span><span class="dv">2</span>))</a></code></pre></div>
+<a class="sourceLine" id="cb7-17" data-line-number="17"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">formated_p =</span> <span class="kw">format</span>(t_test, <span class="dt">digits=</span><span class="dv">1</span>))</a></code></pre></div>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="kw">ggplot</span>(cohort1_ttest, <span class="kw">aes</span>(<span class="dt">x=</span>complement, <span class="dt">y=</span>log10Pval, <span class="dt">fill=</span>candidate)) <span class="op">+</span></a>
 <a class="sourceLine" id="cb8-2" data-line-number="2"><span class="st">  </span><span class="kw">geom_bar</span>(<span class="dt">stat=</span><span class="st">&quot;identity&quot;</span>, <span class="dt">width=</span><span class="fl">0.7</span>, <span class="dt">show.legend=</span><span class="ot">FALSE</span>) <span class="op">+</span></a>
 <a class="sourceLine" id="cb8-3" data-line-number="3"><span class="st">  </span><span class="kw">coord_flip</span>() <span class="op">+</span></a>
 <a class="sourceLine" id="cb8-4" data-line-number="4"><span class="st">  </span><span class="kw">scale_fill_manual</span>(<span class="dt">values=</span><span class="kw">c</span>(<span class="st">&quot;#999999&quot;</span>, <span class="st">&quot;#E69F00&quot;</span>)) <span class="op">+</span></a>
 <a class="sourceLine" id="cb8-5" data-line-number="5"><span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb8-6" data-line-number="6"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">title=</span><span class="st">&quot;Cohort1: t-statistics and p-values&quot;</span>, </a>
-<a class="sourceLine" id="cb8-7" data-line-number="7">       <span class="dt">y=</span><span class="kw">expression</span>(<span class="op">-</span><span class="dv">10</span><span class="op">*</span>Log[<span class="dv">10</span>](p<span class="op">-</span>value) <span class="op">%*%</span><span class="st"> </span><span class="kw">sign</span>(t<span class="op">-</span>stats))) <span class="op">+</span></a>
-<a class="sourceLine" id="cb8-8" data-line-number="8"><span class="st">  </span><span class="kw">geom_text</span>(<span class="kw">aes</span>(<span class="dt">label=</span>formated_p), <span class="dt">vjust=</span><span class="fl">0.5</span>, <span class="dt">hjust=</span><span class="fl">0.5</span>, <span class="dt">color=</span><span class="st">&quot;gray10&quot;</span>,</a>
-<a class="sourceLine" id="cb8-9" data-line-number="9">            <span class="dt">position =</span> <span class="kw">position_dodge</span>(<span class="dv">1</span>), <span class="dt">size=</span><span class="dv">3</span>)</a></code></pre></div>
+<a class="sourceLine" id="cb8-6" data-line-number="6"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">title=</span><span class="kw">TeX</span>(<span class="st">&quot;First cohort: $t$-tests&quot;</span>), <span class="dt">x=</span><span class="st">&quot;Complements&quot;</span>,</a>
+<a class="sourceLine" id="cb8-7" data-line-number="7">       <span class="dt">y=</span><span class="kw">TeX</span>(<span class="st">&quot;$-10</span><span class="ch">\\</span><span class="st">log_{10}(</span><span class="ch">\\</span><span class="st">mathit{p}-val) </span><span class="ch">\\</span><span class="st">times sign(</span><span class="ch">\\</span><span class="st">mathit{t}-stats)$&quot;</span>)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb8-8" data-line-number="8"><span class="st">       </span><span class="co">#y=expression(-10*Log[10](p-value) %*% sign(t-stats))) +</span></a>
+<a class="sourceLine" id="cb8-9" data-line-number="9"><span class="st">  </span><span class="kw">geom_text</span>(<span class="kw">aes</span>(<span class="dt">label=</span>formated_p), <span class="dt">vjust=</span><span class="fl">0.5</span>, <span class="dt">hjust=</span><span class="fl">0.5</span>, <span class="dt">color=</span><span class="st">&quot;gray10&quot;</span>,</a>
+<a class="sourceLine" id="cb8-10" data-line-number="10">            <span class="dt">position =</span> <span class="kw">position_dodge</span>(<span class="dv">1</span>), <span class="dt">size=</span><span class="fl">2.5</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb8-11" data-line-number="11"><span class="st">  </span><span class="kw">theme</span>(<span class="dt">panel.grid.major =</span> <span class="kw">element_blank</span>())</a></code></pre></div>
 <div class="figure"><span id="fig:cohort1-ttest-barplot"></span>
-<img src="gitbook_files/figure-html/cohort1-ttest-barplot-1.png" alt="Cohort1 per-compoment t-tests: FSHD vs. controls. * negative -10Log10(p-value) indicates negative t-statistics." width="672" />
+<img src="gitbook_files/figure-html/cohort1-ttest-barplot-1.png" alt="Cohort1 per-compoment t-tests: FSHD vs. controls. Annotation refers to p-values. * negative -10Log10(p-value) indicates negative t-statistics." width="672" />
 <p class="caption">
-Figure 1.1: Cohort1 per-compoment t-tests: FSHD vs. controls. * negative -10Log10(p-value) indicates negative t-statistics.
+Figure 1.1: Cohort1 per-compoment t-tests: FSHD vs. controls. Annotation refers to p-values. * negative -10Log10(p-value) indicates negative t-statistics.
 </p>
 </div>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="kw">ggsave</span>(<span class="dt">file=</span><span class="kw">file.path</span>(pkg_dir, <span class="st">&quot;figures&quot;</span>, <span class="st">&quot;cohort1-ttest-pvalue-bar.pdf&quot;</span>),</a>
-<a class="sourceLine" id="cb9-2" data-line-number="2">       <span class="dt">width=</span><span class="dv">5</span>, <span class="dt">height=</span><span class="dv">3</span>)  </a></code></pre></div>
+<a class="sourceLine" id="cb9-2" data-line-number="2">       <span class="dt">width=</span><span class="dv">3</span>, <span class="dt">height=</span><span class="fl">2.5</span>)  </a></code></pre></div>
 </div>
 <div id="violin-plot-of-14-complement-components-measurements" class="section level3">
 <h3><span class="header-section-number">1.2.2</span> Violin plot of 14 complement components measurements</h3>
@@ -436,12 +438,13 @@ Figure 1.1: Cohort1 per-compoment t-tests: FSHD vs. controls. * negative -10Log
 <a class="sourceLine" id="cb10-8" data-line-number="8"><span class="st">    </span><span class="kw">stat_summary</span>(<span class="dt">fun=</span>mean, <span class="dt">geom=</span><span class="st">&quot;point&quot;</span>, <span class="dt">shape=</span><span class="dv">23</span>, <span class="dt">size=</span><span class="fl">2.5</span>,</a>
 <a class="sourceLine" id="cb10-9" data-line-number="9">                 <span class="dt">color=</span><span class="st">&quot;#FF0000&quot;</span>) <span class="op">+</span></a>
 <a class="sourceLine" id="cb10-10" data-line-number="10"><span class="st">    </span><span class="kw">theme_minimal</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb10-11" data-line-number="11"><span class="st">    </span><span class="kw">labs</span>( <span class="dt">y=</span><span class="kw">expression</span>(mu<span class="op">*</span>g <span class="op">/</span><span class="st"> </span>ml)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb10-12" data-line-number="12"><span class="st">    </span><span class="kw">facet_wrap</span>(<span class="op">~</span><span class="st"> </span>complement , <span class="dt">scale=</span><span class="st">&quot;free&quot;</span>, <span class="dt">nrow=</span><span class="dv">3</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb10-13" data-line-number="13"><span class="st">    </span><span class="kw">scale_fill_manual</span>(<span class="dt">values=</span>my_color) <span class="op">+</span></a>
-<a class="sourceLine" id="cb10-14" data-line-number="14"><span class="st">    </span><span class="kw">scale_color_manual</span>(<span class="dt">values=</span>my_color) <span class="op">+</span></a>
-<a class="sourceLine" id="cb10-15" data-line-number="15"><span class="st">    </span><span class="kw">theme</span>(<span class="dt">legend.position=</span><span class="st">&quot;none&quot;</span>,  <span class="dt">legend.key.size =</span> <span class="kw">unit</span>(<span class="fl">0.4</span>, <span class="st">&#39;cm&#39;</span>),</a>
-<a class="sourceLine" id="cb10-16" data-line-number="16">          <span class="dt">axis.title.x=</span><span class="kw">element_blank</span>())</a></code></pre></div>
+<a class="sourceLine" id="cb10-11" data-line-number="11"><span class="st">    </span><span class="kw">labs</span>( <span class="dt">y=</span><span class="kw">expression</span>(mu<span class="op">*</span>g <span class="op">/</span><span class="st"> </span>ml), </a>
+<a class="sourceLine" id="cb10-12" data-line-number="12">          <span class="dt">title=</span><span class="st">&quot;First cohort complement components&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb10-13" data-line-number="13"><span class="st">    </span><span class="kw">facet_wrap</span>(<span class="op">~</span><span class="st"> </span>complement , <span class="dt">scale=</span><span class="st">&quot;free&quot;</span>, <span class="dt">nrow=</span><span class="dv">3</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb10-14" data-line-number="14"><span class="st">    </span><span class="kw">scale_fill_manual</span>(<span class="dt">values=</span>my_color) <span class="op">+</span></a>
+<a class="sourceLine" id="cb10-15" data-line-number="15"><span class="st">    </span><span class="kw">scale_color_manual</span>(<span class="dt">values=</span>my_color) <span class="op">+</span></a>
+<a class="sourceLine" id="cb10-16" data-line-number="16"><span class="st">    </span><span class="kw">theme</span>(<span class="dt">legend.position=</span><span class="kw">c</span>(<span class="fl">0.9</span>, <span class="fl">0.15</span>),  <span class="dt">legend.key.size =</span> <span class="kw">unit</span>(<span class="fl">0.4</span>, <span class="st">&#39;cm&#39;</span>),</a>
+<a class="sourceLine" id="cb10-17" data-line-number="17">          <span class="dt">axis.title.x=</span><span class="kw">element_blank</span>(), <span class="dt">axis.text.x=</span><span class="kw">element_blank</span>())</a></code></pre></div>
 <div class="figure"><span id="fig:cohort1-violin"></span>
 <img src="gitbook_files/figure-html/cohort1-violin-1.png" alt="14 complement components measurements grouped by FSHD and control samples." width="672" />
 <p class="caption">
@@ -449,7 +452,7 @@ Figure 1.2: 14 complement components measurements grouped by FSHD and control sa
 </p>
 </div>
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1"><span class="kw">ggsave</span>(<span class="dt">file=</span><span class="kw">file.path</span>(pkg_dir, <span class="st">&quot;figures&quot;</span>, <span class="st">&quot;cohort1-violin-14components.pdf&quot;</span>),</a>
-<a class="sourceLine" id="cb11-2" data-line-number="2">       <span class="dt">width=</span><span class="fl">6.5</span>, <span class="dt">height=</span><span class="dv">6</span>)</a></code></pre></div>
+<a class="sourceLine" id="cb11-2" data-line-number="2">       <span class="dt">width=</span><span class="fl">4.5</span>, <span class="dt">height=</span><span class="fl">4.5</span>)</a></code></pre></div>
 </div>
 <div id="heatmap-and-cluster-analysis" class="section level3">
 <h3><span class="header-section-number">1.2.3</span> Heatmap and cluster analysis</h3>

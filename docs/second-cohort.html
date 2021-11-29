@@ -24,7 +24,7 @@
 <meta name="author" content="Chao-Jen Wong" />
 
 
-<meta name="date" content="2021-11-26" />
+<meta name="date" content="2021-11-27" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -157,7 +157,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="3" data-path="combined-cohort.html"><a href="combined-cohort.html"><i class="fa fa-check"></i><b>3</b> Combined cohort</a><ul>
 <li class="chapter" data-level="3.1" data-path="combined-cohort.html"><a href="combined-cohort.html#explore-components-best-distinguish-fshd-from-controls"><i class="fa fa-check"></i><b>3.1</b> Explore components best distinguish FSHD from controls</a><ul>
-<li class="chapter" data-level="3.1.1" data-path="combined-cohort.html"><a href="combined-cohort.html#t-test"><i class="fa fa-check"></i><b>3.1.1</b> t-test</a></li>
+<li class="chapter" data-level="3.1.1" data-path="combined-cohort.html"><a href="combined-cohort.html#t-test"><i class="fa fa-check"></i><b>3.1.1</b> <span class="math inline">\(t\)</span>-test</a></li>
 <li class="chapter" data-level="3.1.2" data-path="combined-cohort.html"><a href="combined-cohort.html#correlation-tests"><i class="fa fa-check"></i><b>3.1.2</b> Correlation tests</a></li>
 </ul></li>
 <li class="chapter" data-level="3.2" data-path="combined-cohort.html"><a href="combined-cohort.html#panel-of-seven---classification-and-composite-z-score"><i class="fa fa-check"></i><b>3.2</b> Panel of seven - Classification and composite z-score</a><ul>
@@ -173,7 +173,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="3.4" data-path="combined-cohort.html"><a href="combined-cohort.html#clinical-severity-score-and-d4z4-repeats"><i class="fa fa-check"></i><b>3.4</b> Clinical severity score and D4Z4 repeats</a><ul>
 <li class="chapter" data-level="3.4.1" data-path="combined-cohort.html"><a href="combined-cohort.html#css-vs.composite-z-score"><i class="fa fa-check"></i><b>3.4.1</b> CSS vs. composite z-score</a></li>
 <li class="chapter" data-level="3.4.2" data-path="combined-cohort.html"><a href="combined-cohort.html#d4z4-vs.composite-z-score"><i class="fa fa-check"></i><b>3.4.2</b> D4Z4 vs. composite z-score</a></li>
-<li class="chapter" data-level="3.4.3" data-path="combined-cohort.html"><a href="combined-cohort.html#d4z4-vs.complement-levels"><i class="fa fa-check"></i><b>3.4.3</b> D4Z4 vs. complement levels</a></li>
 </ul></li>
 </ul></li>
 <li class="divider"></li>
@@ -447,7 +446,8 @@ Figure 2.2: 14 complement components measurements grouped by FSHD and control sa
 </div>
 <div id="controls-from-two-cohorts" class="section level2">
 <h2><span class="header-section-number">2.3</span> Controls from two cohorts</h2>
-<p>Suppl. Fig. 2a</p>
+<p>Shown below is a violin plot of complement component levels in controls from first and second cohorts.</p>
+<p>Code chunk below made Suppl. Fig. 2a.</p>
 <div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1"><span class="co"># get cohort1 and tidy up the control samples from 1st and 2nd cohorts</span></a>
 <a class="sourceLine" id="cb12-2" data-line-number="2">cohort1 &lt;-<span class="st"> </span><span class="kw">get</span>(<span class="kw">load</span>(<span class="kw">file.path</span>(pkg_dir, <span class="st">&quot;data&quot;</span>, <span class="st">&quot;table_1.rda&quot;</span>)))</a>
 <a class="sourceLine" id="cb12-3" data-line-number="3">cohort1_control &lt;-<span class="st"> </span><span class="kw">.tidy_names</span>(cohort1) <span class="op">%&gt;%</span></a>
@@ -489,7 +489,7 @@ Figure 2.3: Complement levels of controls from two cohorts. The violin plots dis
 </div>
 <div id="stability-of-fshds-between-two-visits" class="section level2">
 <h2><span class="header-section-number">2.4</span> Stability of FSHDs between two visits</h2>
-<p>The first and the second visits are names <code>plasma1</code> and <code>plasma2</code> respectively. The code chuck below reproduce Suppl. Fig. 2b.</p>
+<p>The FSHD subjects’ first and the second visits are named <code>plasma1</code> and <code>plasma2</code> respectively. We made a trajectory plot – <code>plasma 1</code> to <code>plasma 2</code> – for each of the complement component. There are total 41 FSHD subjects (41 dots on <code>plasma 1</code>) and only 20 have the second visits. The code chuck below reproduce Suppl. Fig. 2b. The</p>
 <div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1">cohort2_pairs &lt;-<span class="st"> </span></a>
 <a class="sourceLine" id="cb15-2" data-line-number="2"><span class="st">  </span><span class="kw">get</span>(<span class="kw">load</span>(<span class="kw">file.path</span>(pkg_dir, <span class="st">&quot;data&quot;</span>, <span class="st">&quot;table_4_update.rda&quot;</span>)))  <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb15-3" data-line-number="3"><span class="st">  </span><span class="kw">.tidy_names</span>(.) <span class="op">%&gt;%</span><span class="st"> </span></a>
@@ -523,6 +523,728 @@ Figure 2.4: A trajectory plot of complement levels between the first (plasma1) a
 </p>
 </div>
 <div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1"><span class="kw">ggsave</span>(<span class="kw">file.path</span>(pkg_dir, <span class="st">&quot;figures&quot;</span>, <span class="st">&quot;Cohort2-plasma-pairs-trajectoryplot.pdf&quot;</span>), <span class="dt">width=</span><span class="fl">7.5</span>, <span class="dt">height=</span><span class="dv">6</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1">all_cohort2_visits &lt;-<span class="st"> </span></a>
+<a class="sourceLine" id="cb17-2" data-line-number="2"><span class="st">  </span><span class="kw">get</span>(<span class="kw">load</span>(<span class="kw">file.path</span>(pkg_dir, <span class="st">&quot;data&quot;</span>, <span class="st">&quot;table_4_update.rda&quot;</span>)))  <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb17-3" data-line-number="3"><span class="st">  </span><span class="kw">.tidy_names</span>(.) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb17-4" data-line-number="4"><span class="st">  </span><span class="kw">filter</span>(Cohort <span class="op">==</span><span class="st"> &quot;cohort2&quot;</span>, pheno_type <span class="op">==</span><span class="st"> &quot;FSHD&quot;</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb17-5" data-line-number="5"><span class="st">  </span><span class="kw">select</span>(<span class="st">`</span><span class="dt">sample ID</span><span class="st">`</span>, components, Plasma, <span class="st">`</span><span class="dt">patient ID</span><span class="st">`</span>) </a>
+<a class="sourceLine" id="cb17-6" data-line-number="6"></a>
+<a class="sourceLine" id="cb17-7" data-line-number="7">paired_ID &lt;-<span class="st"> </span>all_cohort2_visits <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb17-8" data-line-number="8"><span class="st">  </span><span class="kw">filter</span>(Plasma <span class="op">==</span><span class="st"> &quot;plasma2&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">pull</span>(<span class="st">`</span><span class="dt">patient ID</span><span class="st">`</span>) </a>
+<a class="sourceLine" id="cb17-9" data-line-number="9"></a>
+<a class="sourceLine" id="cb17-10" data-line-number="10">paired &lt;-<span class="st"> </span>all_cohort2_visits <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb17-11" data-line-number="11"><span class="st">  </span><span class="kw">filter</span>(<span class="st">`</span><span class="dt">patient ID</span><span class="st">`</span> <span class="op">%in%</span><span class="st"> </span>paired_ID) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb17-12" data-line-number="12"><span class="st">  </span><span class="kw">select</span>(<span class="op">-</span><span class="st">`</span><span class="dt">sample ID</span><span class="st">`</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb17-13" data-line-number="13"><span class="st">  </span><span class="kw">gather</span>(<span class="dt">key=</span>complement, <span class="dt">value=</span>ml, <span class="op">-</span>Plasma, <span class="op">-</span><span class="st">`</span><span class="dt">patient ID</span><span class="st">`</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb17-14" data-line-number="14"><span class="st">  </span><span class="kw">spread</span>(Plasma, ml)</a>
+<a class="sourceLine" id="cb17-15" data-line-number="15"></a>
+<a class="sourceLine" id="cb17-16" data-line-number="16">lm_eqn &lt;-<span class="st"> </span><span class="cf">function</span>(df){</a>
+<a class="sourceLine" id="cb17-17" data-line-number="17">    m &lt;-<span class="st"> </span><span class="kw">lm</span>(plasma2 <span class="op">~</span><span class="st"> </span>plasma1, df);</a>
+<a class="sourceLine" id="cb17-18" data-line-number="18">    eq &lt;-<span class="st"> </span><span class="kw">substitute</span>(<span class="kw">italic</span>(y) <span class="op">==</span><span class="st"> </span>a <span class="op">+</span><span class="st"> </span>b <span class="op">%.%</span><span class="st"> </span><span class="kw">italic</span>(x)<span class="op">*</span><span class="st">&quot;,&quot;</span><span class="op">~</span><span class="er">~</span><span class="kw">italic</span>(r)<span class="op">~</span><span class="st">&quot;=&quot;</span><span class="op">~</span>r2,</a>
+<a class="sourceLine" id="cb17-19" data-line-number="19">         <span class="kw">list</span>(<span class="dt">a =</span> <span class="kw">format</span>(<span class="kw">unname</span>(<span class="kw">coef</span>(m)[<span class="dv">1</span>]), <span class="dt">digits =</span> <span class="dv">2</span>),</a>
+<a class="sourceLine" id="cb17-20" data-line-number="20">              <span class="dt">b =</span> <span class="kw">format</span>(<span class="kw">unname</span>(<span class="kw">coef</span>(m)[<span class="dv">2</span>]), <span class="dt">digits =</span> <span class="dv">2</span>),</a>
+<a class="sourceLine" id="cb17-21" data-line-number="21">              <span class="dt">r2 =</span> <span class="kw">format</span>(<span class="kw">sqrt</span>(<span class="kw">summary</span>(m)<span class="op">$</span>r.squared), <span class="dt">digits =</span> <span class="dv">3</span>)))</a>
+<a class="sourceLine" id="cb17-22" data-line-number="22">    <span class="kw">data.frame</span>(<span class="dt">label=</span><span class="kw">as.character</span>(<span class="kw">as.expression</span>(eq)))</a>
+<a class="sourceLine" id="cb17-23" data-line-number="23">}</a>
+<a class="sourceLine" id="cb17-24" data-line-number="24"></a>
+<a class="sourceLine" id="cb17-25" data-line-number="25">lm_r2 &lt;-<span class="st"> </span><span class="cf">function</span>(df) {</a>
+<a class="sourceLine" id="cb17-26" data-line-number="26">  m &lt;-<span class="st"> </span><span class="kw">lm</span>(plasma2 <span class="op">~</span><span class="st"> </span>plasma1, df)</a>
+<a class="sourceLine" id="cb17-27" data-line-number="27">  r2 &lt;-<span class="st"> </span><span class="kw">format</span>(<span class="kw">sqrt</span>(<span class="kw">summary</span>(m)<span class="op">$</span>r.squared), <span class="dt">digits =</span> <span class="dv">3</span>)</a>
+<a class="sourceLine" id="cb17-28" data-line-number="28">  <span class="kw">data.frame</span>(<span class="dt">label=</span><span class="kw">paste0</span>(<span class="st">&quot;r2=&quot;</span>, r2))</a>
+<a class="sourceLine" id="cb17-29" data-line-number="29">}</a>
+<a class="sourceLine" id="cb17-30" data-line-number="30"></a>
+<a class="sourceLine" id="cb17-31" data-line-number="31">lm_<span class="dv">2</span> &lt;-<span class="st"> </span>paired <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(complement) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb17-32" data-line-number="32"><span class="st"> </span><span class="kw">group_modify</span>( <span class="op">~</span><span class="st"> </span><span class="kw">lm_r2</span>(.x))</a>
+<a class="sourceLine" id="cb17-33" data-line-number="33"></a>
+<a class="sourceLine" id="cb17-34" data-line-number="34">lm &lt;-<span class="st"> </span>paired <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(complement) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb17-35" data-line-number="35"><span class="st">  </span><span class="kw">group_modify</span>(<span class="op">~</span><span class="st"> </span>broom<span class="op">::</span><span class="kw">tidy</span>(<span class="kw">lm</span>(plasma2 <span class="op">~</span><span class="st"> </span>plasma1, <span class="dt">data =</span> .x)))</a>
+<a class="sourceLine" id="cb17-36" data-line-number="36"></a>
+<a class="sourceLine" id="cb17-37" data-line-number="37"></a>
+<a class="sourceLine" id="cb17-38" data-line-number="38"><span class="kw">ggplot</span>(paired, <span class="kw">aes</span>(<span class="dt">x=</span>plasma1, <span class="dt">y=</span>plasma2)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb17-39" data-line-number="39"><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb17-40" data-line-number="40"><span class="st">  </span><span class="kw">geom_smooth</span>(<span class="dt">method=</span><span class="st">&quot;lm&quot;</span>, <span class="dt">se=</span><span class="ot">FALSE</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb17-41" data-line-number="41"><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span><span class="st"> </span>complement, <span class="dt">nrow=</span><span class="dv">3</span>, <span class="dt">scale=</span><span class="st">&quot;free&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb17-42" data-line-number="42"><span class="st">  </span><span class="kw">geom_abline</span>(<span class="dt">slope=</span><span class="dv">1</span>, <span class="dt">intercept=</span><span class="dv">0</span>, <span class="dt">linetype=</span><span class="st">&quot;dashed&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb17-43" data-line-number="43"><span class="st">  </span><span class="kw">theme_minimal</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb17-44" data-line-number="44"><span class="st">  </span><span class="kw">geom_text</span>(</a>
+<a class="sourceLine" id="cb17-45" data-line-number="45">    <span class="dt">size    =</span> <span class="dv">4</span>,</a>
+<a class="sourceLine" id="cb17-46" data-line-number="46">    <span class="dt">data    =</span> lm_<span class="dv">2</span>,</a>
+<a class="sourceLine" id="cb17-47" data-line-number="47">    <span class="dt">mapping =</span> <span class="kw">aes</span>(<span class="dt">x =</span> <span class="ot">Inf</span>, <span class="dt">y =</span> <span class="ot">Inf</span>, <span class="dt">label =</span> label),</a>
+<a class="sourceLine" id="cb17-48" data-line-number="48">    <span class="dt">hjust   =</span> <span class="fl">1.7</span>,</a>
+<a class="sourceLine" id="cb17-49" data-line-number="49">    <span class="dt">vjust   =</span> <span class="fl">1.5</span></a>
+<a class="sourceLine" id="cb17-50" data-line-number="50">  ) <span class="op">+</span></a>
+<a class="sourceLine" id="cb17-51" data-line-number="51"><span class="st">  </span><span class="kw">theme</span>(<span class="dt">panel.grid.major =</span> <span class="kw">element_blank</span>(), </a>
+<a class="sourceLine" id="cb17-52" data-line-number="52">        <span class="dt">panel.grid.minor =</span> <span class="kw">element_blank</span>())</a></code></pre></div>
+<p><img src="gitbook_files/figure-html/scatter-between-two-visits-1.png" width="672" /></p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" data-line-number="1"><span class="kw">ggsave</span>(<span class="kw">file.path</span>(pkg_dir, <span class="st">&quot;figures&quot;</span>, </a>
+<a class="sourceLine" id="cb18-2" data-line-number="2">                 <span class="st">&quot;Cohort2-plasma-pairs-scatterplot.pdf&quot;</span>), <span class="dt">width=</span><span class="fl">7.5</span>, <span class="dt">height=</span><span class="dv">6</span>)</a></code></pre></div>
+<p>note: higher R-squared values represent smaller differences between the observed data and the fitted values.</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" data-line-number="1"><span class="co">#broom::tidy</span></a>
+<a class="sourceLine" id="cb19-2" data-line-number="2">paired <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(complement) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb19-3" data-line-number="3"><span class="st">  </span><span class="kw">group_modify</span>(<span class="op">~</span><span class="st"> </span>broom<span class="op">::</span><span class="kw">glance</span>(<span class="kw">lm</span>(plasma2 <span class="op">~</span><span class="st"> </span>plasma1, <span class="dt">data =</span> .x))) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb19-4" data-line-number="4"><span class="st">  </span>knitr<span class="op">::</span><span class="kw">kable</span>()</a></code></pre></div>
+<table>
+<thead>
+<tr>
+<th style="text-align:left;">
+complement
+</th>
+<th style="text-align:right;">
+r.squared
+</th>
+<th style="text-align:right;">
+adj.r.squared
+</th>
+<th style="text-align:right;">
+sigma
+</th>
+<th style="text-align:right;">
+statistic
+</th>
+<th style="text-align:right;">
+p.value
+</th>
+<th style="text-align:right;">
+df
+</th>
+<th style="text-align:right;">
+logLik
+</th>
+<th style="text-align:right;">
+AIC
+</th>
+<th style="text-align:right;">
+BIC
+</th>
+<th style="text-align:right;">
+deviance
+</th>
+<th style="text-align:right;">
+df.residual
+</th>
+<th style="text-align:right;">
+nobs
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Bb
+</td>
+<td style="text-align:right;">
+0.6762489
+</td>
+<td style="text-align:right;">
+0.6582627
+</td>
+<td style="text-align:right;">
+0.1368799
+</td>
+<td style="text-align:right;">
+37.598268
+</td>
+<td style="text-align:right;">
+0.0000086
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+12.447863
+</td>
+<td style="text-align:right;">
+-18.89573
+</td>
+<td style="text-align:right;">
+-15.90853
+</td>
+<td style="text-align:right;">
+3.372499e-01
+</td>
+<td style="text-align:right;">
+18
+</td>
+<td style="text-align:right;">
+20
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+C1q
+</td>
+<td style="text-align:right;">
+0.4107782
+</td>
+<td style="text-align:right;">
+0.3780437
+</td>
+<td style="text-align:right;">
+7.4741645
+</td>
+<td style="text-align:right;">
+12.548769
+</td>
+<td style="text-align:right;">
+0.0023268
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+-67.554212
+</td>
+<td style="text-align:right;">
+141.10842
+</td>
+<td style="text-align:right;">
+144.09562
+</td>
+<td style="text-align:right;">
+1.005536e+03
+</td>
+<td style="text-align:right;">
+18
+</td>
+<td style="text-align:right;">
+20
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+C2
+</td>
+<td style="text-align:right;">
+0.4467910
+</td>
+<td style="text-align:right;">
+0.4160572
+</td>
+<td style="text-align:right;">
+0.8782543
+</td>
+<td style="text-align:right;">
+14.537433
+</td>
+<td style="text-align:right;">
+0.0012745
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+-24.728784
+</td>
+<td style="text-align:right;">
+55.45757
+</td>
+<td style="text-align:right;">
+58.44477
+</td>
+<td style="text-align:right;">
+1.388395e+01
+</td>
+<td style="text-align:right;">
+18
+</td>
+<td style="text-align:right;">
+20
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+C3
+</td>
+<td style="text-align:right;">
+0.4015342
+</td>
+<td style="text-align:right;">
+0.3682861
+</td>
+<td style="text-align:right;">
+14.6801187
+</td>
+<td style="text-align:right;">
+12.076905
+</td>
+<td style="text-align:right;">
+0.0027015
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+-81.055048
+</td>
+<td style="text-align:right;">
+168.11010
+</td>
+<td style="text-align:right;">
+171.09729
+</td>
+<td style="text-align:right;">
+3.879106e+03
+</td>
+<td style="text-align:right;">
+18
+</td>
+<td style="text-align:right;">
+20
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+C4
+</td>
+<td style="text-align:right;">
+0.7740760
+</td>
+<td style="text-align:right;">
+0.7615247
+</td>
+<td style="text-align:right;">
+11.9574930
+</td>
+<td style="text-align:right;">
+61.672817
+</td>
+<td style="text-align:right;">
+0.0000003
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+-76.952328
+</td>
+<td style="text-align:right;">
+159.90466
+</td>
+<td style="text-align:right;">
+162.89185
+</td>
+<td style="text-align:right;">
+2.573670e+03
+</td>
+<td style="text-align:right;">
+18
+</td>
+<td style="text-align:right;">
+20
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+C4a
+</td>
+<td style="text-align:right;">
+0.3591547
+</td>
+<td style="text-align:right;">
+0.3235522
+</td>
+<td style="text-align:right;">
+781.4719494
+</td>
+<td style="text-align:right;">
+10.087904
+</td>
+<td style="text-align:right;">
+0.0052295
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+-160.548751
+</td>
+<td style="text-align:right;">
+327.09750
+</td>
+<td style="text-align:right;">
+330.08470
+</td>
+<td style="text-align:right;">
+1.099257e+07
+</td>
+<td style="text-align:right;">
+18
+</td>
+<td style="text-align:right;">
+20
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+C4b
+</td>
+<td style="text-align:right;">
+0.9219415
+</td>
+<td style="text-align:right;">
+0.9176050
+</td>
+<td style="text-align:right;">
+0.8822639
+</td>
+<td style="text-align:right;">
+212.596431
+</td>
+<td style="text-align:right;">
+0.0000000
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+-24.819884
+</td>
+<td style="text-align:right;">
+55.63977
+</td>
+<td style="text-align:right;">
+58.62696
+</td>
+<td style="text-align:right;">
+1.401101e+01
+</td>
+<td style="text-align:right;">
+18
+</td>
+<td style="text-align:right;">
+20
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+C5
+</td>
+<td style="text-align:right;">
+0.9413850
+</td>
+<td style="text-align:right;">
+0.9381286
+</td>
+<td style="text-align:right;">
+7.2665682
+</td>
+<td style="text-align:right;">
+289.088500
+</td>
+<td style="text-align:right;">
+0.0000000
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+-66.990848
+</td>
+<td style="text-align:right;">
+139.98170
+</td>
+<td style="text-align:right;">
+142.96889
+</td>
+<td style="text-align:right;">
+9.504542e+02
+</td>
+<td style="text-align:right;">
+18
+</td>
+<td style="text-align:right;">
+20
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+C5a
+</td>
+<td style="text-align:right;">
+0.9041648
+</td>
+<td style="text-align:right;">
+0.8988406
+</td>
+<td style="text-align:right;">
+0.1026601
+</td>
+<td style="text-align:right;">
+169.822464
+</td>
+<td style="text-align:right;">
+0.0000000
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+18.201464
+</td>
+<td style="text-align:right;">
+-30.40293
+</td>
+<td style="text-align:right;">
+-27.41573
+</td>
+<td style="text-align:right;">
+1.897038e-01
+</td>
+<td style="text-align:right;">
+18
+</td>
+<td style="text-align:right;">
+20
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Factor B
+</td>
+<td style="text-align:right;">
+0.5788393
+</td>
+<td style="text-align:right;">
+0.5554415
+</td>
+<td style="text-align:right;">
+14.5282659
+</td>
+<td style="text-align:right;">
+24.739035
+</td>
+<td style="text-align:right;">
+0.0000983
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+-80.847088
+</td>
+<td style="text-align:right;">
+167.69418
+</td>
+<td style="text-align:right;">
+170.68137
+</td>
+<td style="text-align:right;">
+3.799269e+03
+</td>
+<td style="text-align:right;">
+18
+</td>
+<td style="text-align:right;">
+20
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Factor D
+</td>
+<td style="text-align:right;">
+0.7946752
+</td>
+<td style="text-align:right;">
+0.7832683
+</td>
+<td style="text-align:right;">
+0.1555438
+</td>
+<td style="text-align:right;">
+69.666001
+</td>
+<td style="text-align:right;">
+0.0000001
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+9.891394
+</td>
+<td style="text-align:right;">
+-13.78279
+</td>
+<td style="text-align:right;">
+-10.79559
+</td>
+<td style="text-align:right;">
+4.354897e-01
+</td>
+<td style="text-align:right;">
+18
+</td>
+<td style="text-align:right;">
+20
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Factor H
+</td>
+<td style="text-align:right;">
+0.7669726
+</td>
+<td style="text-align:right;">
+0.7540267
+</td>
+<td style="text-align:right;">
+13.8459725
+</td>
+<td style="text-align:right;">
+59.244152
+</td>
+<td style="text-align:right;">
+0.0000004
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+-79.885053
+</td>
+<td style="text-align:right;">
+165.77011
+</td>
+<td style="text-align:right;">
+168.75730
+</td>
+<td style="text-align:right;">
+3.450797e+03
+</td>
+<td style="text-align:right;">
+18
+</td>
+<td style="text-align:right;">
+20
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Factor I
+</td>
+<td style="text-align:right;">
+0.8183616
+</td>
+<td style="text-align:right;">
+0.8082706
+</td>
+<td style="text-align:right;">
+2.4288906
+</td>
+<td style="text-align:right;">
+81.097982
+</td>
+<td style="text-align:right;">
+0.0000000
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+-45.073858
+</td>
+<td style="text-align:right;">
+96.14772
+</td>
+<td style="text-align:right;">
+99.13491
+</td>
+<td style="text-align:right;">
+1.061912e+02
+</td>
+<td style="text-align:right;">
+18
+</td>
+<td style="text-align:right;">
+20
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+MBL
+</td>
+<td style="text-align:right;">
+0.9382732
+</td>
+<td style="text-align:right;">
+0.9348440
+</td>
+<td style="text-align:right;">
+0.1574369
+</td>
+<td style="text-align:right;">
+273.607760
+</td>
+<td style="text-align:right;">
+0.0000000
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+9.649445
+</td>
+<td style="text-align:right;">
+-13.29889
+</td>
+<td style="text-align:right;">
+-10.31169
+</td>
+<td style="text-align:right;">
+4.461548e-01
+</td>
+<td style="text-align:right;">
+18
+</td>
+<td style="text-align:right;">
+20
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+sC5b-9
+</td>
+<td style="text-align:right;">
+0.2139320
+</td>
+<td style="text-align:right;">
+0.1702616
+</td>
+<td style="text-align:right;">
+61.2278554
+</td>
+<td style="text-align:right;">
+4.898782
+</td>
+<td style="text-align:right;">
+0.0400307
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+-109.617210
+</td>
+<td style="text-align:right;">
+225.23442
+</td>
+<td style="text-align:right;">
+228.22162
+</td>
+<td style="text-align:right;">
+6.747930e+04
+</td>
+<td style="text-align:right;">
+18
+</td>
+<td style="text-align:right;">
+20
+</td>
+</tr>
+</tbody>
+</table>
 
 </div>
 </div>

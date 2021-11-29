@@ -30,12 +30,13 @@ In our github repos [data](https://github.com/FredHutch/Wellstone_Plasma_Complem
 suppressPackageStartupMessages(library(dplyr))
 data.frame(dataset = c("table_1.rda", "table_2.rda", 
                        "table_3.rda", "table_4_update.rda"),
-           description=c("first cohort",
-                         "second cohort",
-                         "discovery cohort including selected samples from first and second cohorts",
-                         "comprehensive set of first and second cohorts and re-run samples")) %>%
+           description=c("first cohort, first visits",
+                         "second cohort, first visits",
+                         "discovery cohort of selected samples from first and second cohorts",
+                         "comprehensive set of first and second cohorts and re-runs and second visit samples")) %>%
   knitr::kable(caption="Description of datasets in the data folder")
 ```
+Note that the discovery cohort is a combined cohort consisted of controls from the second cohort, second visits from the first cohort, and first visits from the second cohort. All these plasma samples were from the same assay date. 
 
 
 ## Methods
