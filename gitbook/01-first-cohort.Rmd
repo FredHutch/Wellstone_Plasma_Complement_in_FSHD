@@ -116,12 +116,11 @@ ggplot(cohort1_ttest, aes(x=complement, y=log10Pval, fill=candidate)) +
   theme_bw() +
   labs(title=TeX("First cohort: $t$-tests"), x="Complements",
        y=TeX("$-10\\log_{10}(\\mathit{p}-val) \\times sign(\\mathit{t}-stats)$")) +
-       #y=expression(-10*Log[10](p-value) %*% sign(t-stats))) +
   geom_text(aes(label=formated_p), vjust=0.5, hjust=0.5, color="gray10",
             position = position_dodge(1), size=2.5) +
   theme(panel.grid.major = element_blank())
 ggsave(file=file.path(pkg_dir, "figures", "cohort1-ttest-pvalue-bar.pdf"),
-       width=3, height=2.5)  
+       width=3.2, height=2.5)  
 ```
 
 

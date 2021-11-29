@@ -18,6 +18,8 @@ suppressPackageStartupMessages(library(broom))
 suppressPackageStartupMessages(library(pheatmap))
 suppressPackageStartupMessages(library(viridis))
 suppressPackageStartupMessages(library(pheatmap))
+suppressPackageStartupMessages(library(latex2exp))
+
 pkg_dir <- "~/CompBio/Wellstone_Plasma_Complement_in_FSHD"
 source(file.path(pkg_dir, "scripts", "tools.R"))
 fig_dir <- file.path(pkg_dir, "figures")
@@ -99,7 +101,7 @@ cohort2_ttest <- cohort2_tidy %>%
   mutate(candidate = ifelse(t_test < 0.05, "Yes", "No")) %>%
   arrange(desc(t_test)) %>%
   mutate(complement=factor(complement, levels=complement)) %>%
-  mutate(formated_p = format(t_test, digit=2))
+  mutate(formated_p = format(t_test, digit=1)) 
 ```
 ```{r cohort2-ttest-barplot, fig.cap="Cohort2 per-compoment t-tests: FSHD vs. controls. * negative -10Log10(p-value) indicates negative t-statistics."}
 ggplot(cohort2_ttest, aes(x=complement, y=log10Pval, fill=candidate)) +
@@ -107,12 +109,13 @@ ggplot(cohort2_ttest, aes(x=complement, y=log10Pval, fill=candidate)) +
   coord_flip() +
   scale_fill_manual(values=c("#999999", "#E69F00")) +
   theme_bw() +
-  labs(title="Cohort2: t-statistics and p-values", 
-       y=expression(-10*Log[10](p-value) %*% sign(t-stats))) +
-  geom_text(aes(label=formated_p), vjust=0.5, hjust=0.5, color="gray10",
-            position = position_dodge(1), size=3)
+  labs(title=TeX("Second cohort: $t$-tests"), x="Complements",
+       y=TeX("$-10\\log_{10}(\\mathit{p}-val) \\times sign(\\mathit{t}-stats)$")) +
+  geom_text(aes(label=formated_p), vjust=0.5, hjust=0.6, color="gray10",
+            position = position_dodge(1), size=2.5) +
+  theme(panel.grid.major = element_blank())
 ggsave(file=file.path(pkg_dir, "figures", "cohort2-ttest-pvalue-bar.pdf"),
-       width=5, height=3)  
+       width=3.2, height=2.5)  
 ```
 
 ### Violin plot of 15 complement components measurements
@@ -127,14 +130,15 @@ cohort2_tidy %>%
     stat_summary(fun=mean, geom="point", shape=23, size=2.5,
                  color="#FF0000") +
     theme_minimal() +
-    labs( y=expression(mu*g / ml)) +
+    labs( y=expression(mu*g / ml),
+          title="Second cohort complement components") +
     facet_wrap(~ complement , scale="free", nrow=3) +
     scale_fill_manual(values=my_color) +
     scale_color_manual(values=my_color) +
     theme(legend.position="none",  legend.key.size = unit(0.4, 'cm'),
-          axis.title.x=element_blank())
+          axis.title.x=element_blank(), axis.text.x=element_blank())
 ggsave(file=file.path(pkg_dir, "figures", "cohort2-violin-15components.pdf"),
-       width=6.5, height=6)
+       width=4.5, height=4.5)
 ```
 
 
