@@ -7,7 +7,7 @@ __Folder structure__:
   |- suppl_table3_discover_set.xlsx
   |- suppl_table4_comprehensive_add_Bb.xlsx
 |- scripts (`*.R`): misc. R codes
-|- data (`*.rda`): plasma, demographic and genetirc profiles in R format datasets
+|- data (`*.rda`): suppl tables converted to R `data.frame` format
 |- gitbooks: source R markdown files that make the github page
 |- docs: gitpage html pages
 
