@@ -1,4 +1,4 @@
-This repository is to support computational reproducibility of the manuscript - _Elevated plasmsuppl complement components in facioscapulohumeral dystrophy_. We included our R codes, R-compatital datasets (`*.rda`), plamsa/demographic/genetic profiles (excel sheets), and github page demonstrating the analysis workflow and  automatically executable R code (you can directly run the code and reproduce the statistics and figures in the manuscript).
+This repository is to support computational reproducibility of the manuscript - _Elevated plasmsuppl complement components in facioscapulohumeral dystrophy_. We included our R codes, R-compatital datasets (`*.rda`), plamsa/demographic/genetic profiles (excel sheets), as well as a [gitbook](https://FredHutch.github.io/ Wellstone_Plasma_Complement_in_FSHD) or chapteres demonstrating the analysis workflow and  automatically executable R code (you can directly run the code and reproduce the statistics and figures in the manuscript).
 
 __Folder structure__:
 |- suppl_tables (*.xlsx): plasma, demographic and genetic profiles
@@ -8,6 +8,6 @@ __Folder structure__:
   |- suppl_table4_comprehensive_add_Bb.xlsx
 |- scripts (`*.R`): misc. R codes
 |- data (`*.rda`): plasma, demographic and genetirc profiles in R format datasets
-|- gitpage: R markdown files that make the github page
-|- doc: github pages
+|- gitbooks: source R markdown files that make the github page
+|- docs: gitpage html pages
 
