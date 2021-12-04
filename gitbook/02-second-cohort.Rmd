@@ -186,9 +186,9 @@ ggsave(file.path(pkg_dir, "figures", "controls-two-cohorts-violin.pdf"),
 ```
 
 ## Stability of FSHDs between two visits 
-The FSHD subjects' first and the second visits are named `plasma1` and `plasma2` respectively. We made a trajectory plot -- `plasma 1` to `plasma 2` -- for each of the complement component. There are total 41 FSHD subjects (41 dots on `plasma 1`) and only 20 have the second visits. The code chuck below reproduce Suppl. Fig. 2b. The 
+The FSHD subjects' first and the second visits are named `plasma1` and `plasma2` respectively. We made a trajectory plot -- `plasma 1` to `plasma 2` -- for each of the complement component. There are total 41 FSHD subjects (41 dots on `plasma 1`) and 20 have the second visits (20 dots on `plasma 2`). The code chuck below reproduce Suppl. Fig. 2b. The 
 
-```{r plot-cohort2-plasma1-pairs-trajectory, fig.height=10, fig.cap="A trajectory plot of complement levels between the first (plasma1) and second (plasma2) plasma samples of individuals. The gray area presents the range of complement levels in the second cohort's controls."}
+```{r plot-cohort2-plasma1-pairs-trajectory, fig.height=10, fig.cap="A trajectory plot of complement levels between the first (plasma1) and second (plasma2) plasma samples of individuals. The trajectory was assigned to the subjects that have the second plasma sample. The gray area presents the range of complement levels in the second cohort's controls."}
 cohort2_pairs <- 
   get(load(file.path(pkg_dir, "data", "table_4_update.rda")))  %>%
   .tidy_names(.) %>% 
@@ -218,6 +218,9 @@ ggplot(cohort2_pairs, aes(x=Plasma, y=ml)) +
 ggsave(file.path(pkg_dir, "figures", "Cohort2-plasma-pairs-trajectoryplot.pdf"), width=7.5, height=6)
 ```
 
+### Linear regression 
+We performed linear regression between visits for 20 individuals from the second cohort. The scatter plots show the complement component levels between the first (plasma1) and second (plasma2) plasma samples of of the subset of 20 individuals that provided a second plasma sample 3 months after the first. The solid blue lines are the simple linear regression lines.
+
 ```{r scatter-between-two-visits, fig.height=10}
 
 all_cohort2_visits <- 
@@ -235,14 +238,6 @@ paired <- all_cohort2_visits %>%
   gather(key=complement, value=ml, -Plasma, -`patient ID`) %>%
   spread(Plasma, ml)
 
-lm_eqn <- function(df){
-    m <- lm(plasma2 ~ plasma1, df);
-    eq <- substitute(italic(y) == a + b %.% italic(x)*","~~italic(r)~"="~r2,
-         list(a = format(unname(coef(m)[1]), digits = 2),
-              b = format(unname(coef(m)[2]), digits = 2),
-              r2 = format(sqrt(summary(m)$r.squared), digits = 3)))
-    data.frame(label=as.character(as.expression(eq)))
-}
 
 lm_r2 <- function(df) {
   m <- lm(plasma2 ~ plasma1, df)
@@ -256,22 +251,20 @@ lm_2 <- paired %>% group_by(complement) %>%
 lm <- paired %>% group_by(complement) %>%
   group_modify(~ broom::tidy(lm(plasma2 ~ plasma1, data = .x)))
 
-
 ggplot(paired, aes(x=plasma1, y=plasma2)) +
   geom_point() +
   geom_smooth(method="lm", se=FALSE) +
   facet_wrap(~ complement, nrow=3, scale="free") +
   geom_abline(slope=1, intercept=0, linetype="dashed") +
   theme_minimal() +
-  labs(title="Second cohort: plasma1 vs. plasma2")
+  labs(title="Second cohort: plasma1 vs. plasma2") +
   geom_text(
     size    = 4,
     data    = lm_2,
     mapping = aes(x = Inf, y = Inf, label = label),
     hjust   = 1.7,
-    vjust   = 1.5
-  ) +
-  theme(panel.grid.major = element_blank(), 
+    vjust   = 1.5) +
+    theme(panel.grid.major = element_blank(), 
         panel.grid.minor = element_blank())
 
 ggsave(file.path(pkg_dir, "figures", 
