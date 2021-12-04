@@ -7,8 +7,8 @@ __Folder structure__:
   |- suppl_table2_second_cohort_plasma1.xlsx
   |- suppl_table3_discover_set.xlsx
   |- suppl_table4_comprehensive_add_Bb.xlsx
-|- scripts (`*.R`): misc. R codes
-|- data (`*.rda`): suppl tables converted to R `data.frame` format
-|- gitbook: source R markdown files that make the github page
-|- docs: gitpage html pages
+|- scripts (*.R): misc. R codes
+|- data (*.rda): suppl tables converted to R `data.frame` format
+|- gitbook (*.Rmd): source R markdown files that make the github page
+|- docs (*.html): gitpage html pages
 ```
